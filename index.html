@@ -1775,6 +1775,324 @@
                 font-size: 13px;
             }
         }
+        
+        /* ───────── THIẾT KẾ GIAO DIỆN TINH GỌN CHUẨN IOS CHO IPHONE PRO MAX ───────── */
+        .ios-header {
+            padding: 8px 14px;
+            margin: 6px 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px;
+        }
+        .ios-header .logo {
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.3px;
+        }
+        .logo-tag {
+            background: var(--green-bg);
+            color: var(--green);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+        .ios-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ios-btn-primary {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 18px;
+            border: none;
+            background: var(--green);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+        }
+        .ios-btn-primary:active {
+            transform: scale(0.96);
+            background: #15803d;
+        }
+        .ios-btn-icon {
+            width: 36px;
+            height: 36px;
+            min-height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .ios-btn-icon:active {
+            background: var(--bg);
+            transform: scale(0.94);
+        }
+
+        /* ─── THANH TÌM KIẾM IOS ─── */
+        .ios-controls-container {
+            margin-bottom: 12px;
+        }
+        .ios-search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .ios-search-icon {
+            font-size: 15px;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+        .ios-search-bar input[type="text"] {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: var(--text);
+            outline: none;
+            padding: 6px 0;
+            min-width: 0;
+        }
+        .ios-search-clear {
+            background: var(--border);
+            color: var(--text-light);
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .ios-filter-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .ios-filter-btn:active {
+            background: var(--border);
+        }
+
+        /* ─── DẢI CHIPS CUỘN NGANG (HORIZONTAL SCROLL) ─── */
+        .ios-chips-scroll {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .ios-chips-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .ios-chip {
+            flex: 0 0 auto;
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+        .ios-chip.active {
+            background: var(--yellow-bg);
+            border-color: var(--yellow);
+            color: var(--yellow);
+            font-weight: 600;
+        }
+        .ios-chip-select-wrap {
+            position: relative;
+            flex: 0 0 auto;
+        }
+        .ios-chip-select {
+            padding: 5px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            outline: none;
+        }
+        .ios-chip-clear {
+            background: var(--red-bg) !important;
+            color: var(--red) !important;
+            border-color: var(--red) !important;
+        }
+
+        /* ─── DÒNG TÓM TẮT THỐNG KÊ TINH TẾ ─── */
+        .ios-stats-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+            font-size: 12px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .ios-stats-summary:hover, .ios-stats-summary:active {
+            background: var(--card-bg);
+            border-color: var(--green);
+        }
+        .ios-stats-text strong {
+            color: var(--text);
+        }
+        .ios-stats-link {
+            color: var(--green);
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        /* ─── ACTION SHEETS KIỂU IOS ─── */
+        .modal-sheet {
+            align-items: flex-end !important;
+            padding: 0 !important;
+        }
+        .modal-sheet .sheet-content {
+            border-radius: 20px 20px 0 0 !important;
+            margin-top: auto !important;
+            max-height: 85dvh !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            padding: 12px 18px 24px !important;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15) !important;
+            animation: slideUp 0.25s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 10px;
+        }
+        .sheet-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            margin: 14px 4px 6px;
+            text-transform: uppercase;
+        }
+        .sheet-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+        .sheet-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .sheet-item:active {
+            background: #e2e8f0;
+            transform: scale(0.99);
+        }
+        [data-theme="dark"] .sheet-item:active {
+            background: #334155;
+        }
+        .sheet-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .bg-red { background: var(--red-bg); color: var(--red); }
+        .bg-teal { background: var(--teal-bg); color: var(--teal); }
+        .bg-green { background: var(--green-bg); color: var(--green); }
+        .bg-blue { background: var(--blue-bg); color: var(--blue); }
+        .bg-purple { background: var(--purple-bg); color: var(--purple); }
+        .bg-yellow { background: var(--yellow-bg); color: var(--yellow); }
+        .sheet-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sheet-info strong {
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 1px;
+        }
+        .sheet-info span {
+            font-size: 11px;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .sheet-arrow {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .sheet-footer {
+            margin-top: 14px;
+        }
+
         /* ───────── IPHONE / CẢM ỨNG ───────── */
         html {
             -webkit-text-size-adjust: 100%;
@@ -2203,23 +2521,15 @@
             }
         }
     </style>
-    <!-- ═══════════ HEADER ═══════════ -->
-    <header class="app-header">
+    <!-- ═══════════ HEADER TINH GỌN CHUẨN IOS ═══════════ -->
+    <header class="app-header ios-header">
         <div class="logo">
-            📋 Kho Tài Liệu <span>Pro</span>
+            📋 Kho Tài Liệu <span class="logo-tag">Pro</span>
         </div>
-        <div class="header-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" title="Chế độ sáng/tối">🌙</button>
-            <button class="btn btn-primary" onclick="openAddModal()">＋ Thêm</button>
-            <button class="btn btn-success" id="btnBackup" onclick="backupFullData()">💾 Sao lưu</button>
-            <button class="btn btn-warning" onclick="restoreFullData()">📥 Phục hồi</button>
-            <button class="btn btn-outline" onclick="openStatsModal()">📊 TK</button>
-            <button class="btn btn-outline" onclick="openImportModal()">📥 Nhập JSON</button>
-            <button class="btn btn-outline" onclick="openPDFModal()">📄 PDF</button>
-            <button class="btn btn-outline" onclick="openHTMLModal()">🌐 HTML</button>
-            <button class="btn btn-outline" onclick="toggleMindmapView()">🧠 Sơ đồ tư duy</button>
-            <button class="btn btn-outline" onclick="exportJSON()">📤 Xuất JSON</button>
-            <button class="btn btn-outline" onclick="exportCSV()">📊 Xuất CSV</button>
+        <div class="header-actions ios-header-actions">
+            <button type="button" class="ios-btn-icon" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
+            <button type="button" class="ios-btn-primary" onclick="openSmartAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
+            <button type="button" class="ios-btn-icon" onclick="openToolsMenu()" title="Công cụ & Tiện ích">⋯</button>
         </div>
     </header>
 
@@ -2232,29 +2542,25 @@
         </span>
     </div>
 
-    <!-- ═══════════ HƯỚNG DẪN ═══════════ -->
-    <div class="guide-wrapper">
+    <!-- ═══════════ HƯỚNG DẪN (ĐÃ GỌN VÀO MENU) ═══════════ -->
+    <div class="guide-wrapper" id="guideWrapper" style="display:none;">
         <div class="guide-toggle" onclick="toggleGuide()">
-            <span>📖 Hướng dẫn</span>
+            <span>📖 Hướng dẫn sử dụng</span>
             <span class="arrow" id="guideArrow">▼</span>
         </div>
         <div class="guide-content" id="guideContent">
             <span class="guide-title">📌 CÁC TÍNH NĂNG CHÍNH</span>
             <div class="guide-item">📁 <span class="key">Folder con</span> Tạo cấu trúc thư mục lồng nhau không giới hạn</div>
             <div class="guide-item">📂 <span class="key">Mở rộng/thu gọn</span> Bấm vào ▶ để xem folder con</div>
-            <div class="guide-item">📄 <span class="key">Nhập PDF</span> Tự động nén (3 cấp độ)</div>
-            <div class="guide-item">🌐 <span class="key">Nhập HTML</span> Chọn hoặc kéo thả nhiều file .html, xem trước cách ly, tìm theo nội dung</div>
-            <div class="guide-item">🧠 <span class="key">Sơ đồ tư duy</span> Điều hướng thư mục/tài liệu dạng cây, kéo để di chuyển, cuộn chuột để phóng to</div>
-            <div class="guide-item">💾 <span class="key">Sao lưu</span> Lưu toàn bộ (cả PDF + Folder)</div>
-            <div class="guide-item">📥 <span class="key">Phục hồi</span> Khôi phục từ backup</div>
-            <div class="guide-item">📊 <span class="key">Thống kê</span> Biểu đồ phân tích</div>
-            <div class="guide-item">⭐ <span class="key">Yêu thích</span> Đánh dấu quan trọng</div>
-            <div class="guide-item">👁️ <span class="key">Xem trước</span> PDF ngay trong app</div>
-            <div class="guide-item">🔍 <span class="key">Tìm kiếm</span> Từ khóa + sắp xếp. Tìm được cả chữ bên trong file PDF (không cần gõ dấu), bấm số trang để mở đúng trang. PDF dạng ảnh scan thì không đọc được chữ</div>
-            <div class="guide-item">🗑️ <span class="key">Thùng rác</span> Xóa nhầm thì bấm Hoàn tác ngay, hoặc vào mục Thùng rác ở danh sách thư mục để khôi phục (giữ 30 ngày)</div>
-            <div class="guide-item">↔️ <span class="key">Kéo co giãn</span> Kéo vạch phân cách để điều chỉnh sidebar</div>
-            <div class="guide-item">📱 <span class="key">iPhone</span> Mở bằng Safari → Chia sẻ → <b>Thêm vào Màn hình chính</b>. Dữ liệu nằm trong máy này, hãy 💾 Sao lưu thường xuyên. Xem HTML có mục lục: xoay ngang máy</div>
+            <div class="guide-item">📄 <span class="key">Nhập PDF</span> Tự động nén (3 cấp độ) & đọc chữ tìm kiếm</div>
+            <div class="guide-item">🌐 <span class="key">Nhập HTML</span> Chọn nhiều file, xem trước cách ly</div>
+            <div class="guide-item">🧠 <span class="key">Sơ đồ tư duy</span> Điều hướng dạng cây, kéo & phóng to</div>
+            <div class="guide-item">💾 <span class="key">Sao lưu/Phục hồi</span> Xuất/nhập file JSON an toàn</div>
+            <div class="guide-item">🔍 <span class="key">Tìm kiếm</span> Không cần gõ dấu tiếng Việt, tìm trong nội dung PDF</div>
+            <div class="guide-item">🗑️ <span class="key">Thùng rác</span> Lưu trữ 30 ngày, có nút Hoàn tác ngay lập tức</div>
+            <div class="guide-item">📱 <span class="key">iPhone Pro Max</span> Thêm vào Màn hình chính để dùng như ứng dụng gốc</div>
         </div>
+    </div>
     </div>
 
     <!-- ═══════════ LAYOUT ═══════════ -->
@@ -2297,77 +2603,102 @@
                 📁 Danh sách thư mục
             </button>
 
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm..." />
-                <select id="sortSelect">
-                    <option value="date-desc">📅 Mới nhất</option>
-                    <option value="date-asc">📅 Cũ nhất</option>
-                    <option value="code-asc">🔤 Số hiệu A-Z</option>
-                    <option value="code-desc">🔤 Số hiệu Z-A</option>
-                    <option value="title-asc">📝 Tên A-Z</option>
-                </select>
-                <select id="favoriteFilter">
-                    <option value="">⭐ Tất cả</option>
-                    <option value="favorite">⭐ Yêu thích</option>
-                </select>
-                <button type="button" class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filterBar" onclick="ftToggle()">🔎 Bộ lọc <span class="ft-count" id="filterToggleCount" hidden></span></button>
-            </div>
-            <div class="idx-status" id="idxStatus" role="status" aria-live="polite" hidden></div>
+            <div class="ios-controls-container">
+                <!-- Thanh tìm kiếm kiểu iOS -->
+                <div class="ios-search-bar">
+                    <span class="ios-search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm tài liệu, số hiệu, nội dung..." autocomplete="off" />
+                    <button type="button" class="ios-search-clear" id="searchClearBtn" onclick="clearSearchInput()" style="display:none;">✕</button>
+                    <button type="button" class="ios-filter-btn" id="filterToggle" onclick="ftToggle()" title="Bộ lọc nâng cao">
+                        ⚙️ Lọc <span class="ft-count" id="filterToggleCount" hidden></span>
+                    </button>
+                </div>
 
-            <div class="filter-bar" id="filterBar">
-                <div class="filter-group">
-                    <label>Loại</label>
-                    <select id="typeFilter">
-                        <option value="">Tất cả</option>
-                        <option value="thongtu">Thông tư</option>
-                        <option value="quyetdinh">Quyết định</option>
-                        <option value="nghidinh">Nghị định</option>
-                        <option value="ubnd">UBND</option>
-                        <option value="pdf">PDF</option>
-                    <option value="html">HTML</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Nhóm</label>
-                    <select id="groupFilter">
-                        <option value="">Tất cả</option>
-                        <option value="BXD">Bộ Xây dựng</option>
-                        <option value="CP">Chính phủ</option>
-                        <option value="UBND">UBND</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Hiệu lực</label>
-                    <select id="statusFilter">
-                        <option value="">Tất cả</option>
-                        <option value="active">Hiệu lực</option>
-                        <option value="expired">Hết hiệu lực</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Lĩnh vực</label>
-                    <select id="fieldFilter">
-                        <option value="">Tất cả</option>
-                        <option value="xaydung">Xây dựng</option>
-                        <option value="quyhoach">Quy hoạch</option>
-                        <option value="kinhtexaydung">Kinh tế xây dựng</option>
-                    </select>
-                </div>
-                <button class="clear-btn" onclick="clearFilters()">✕ Xóa lọc</button>
-                <span class="filter-badge" id="activeFilterBadge" style="display:none;">
-                    <span id="filterBadgeText">Lĩnh vực Xây dựng</span>
-                    <span class="close" onclick="clearFilters()">×</span>
-                </span>
-            </div>
+                <div class="idx-status" id="idxStatus" role="status" aria-live="polite" hidden></div>
 
-            <div class="stats-row" id="statsRow">
-                <div class="stat-item"><span class="emoji">📊</span><span class="num" id="statResult">0</span> <span class="label">kết quả</span></div>
-                <div class="stat-item"><span class="emoji">✅</span><span class="num" id="statActive">0</span> <span class="label">hiệu lực</span></div>
-                <div class="stat-item"><span class="emoji">📄</span><span class="num" id="statTotal">0</span> <span class="label">tổng</span></div>
-                <div class="stat-item"><span class="emoji">📑</span><span class="num" id="statPdf">0</span> <span class="label">PDF</span></div>
-                <div class="stat-item"><span class="emoji">🌐</span><span class="num" id="statHtml">0</span> <span class="label">HTML</span></div>
-                <div class="stat-item"><span class="emoji">⭐</span><span class="num" id="statFavorite">0</span> <span class="label">yêu thích</span></div>
-                <div class="stat-item"><span class="emoji">📁</span><span class="num" id="statFolderCount">0</span> <span class="label">thư mục</span></div>
+                <!-- Dải Quick Filter Chips cuộn ngang mượt mà trên iPhone -->
+                <div class="ios-chips-scroll">
+                    <button type="button" class="ios-chip" id="chipFavorite" onclick="toggleFavoriteChip()">
+                        ⭐ Yêu thích
+                    </button>
+                    <div class="ios-chip-select-wrap">
+                        <select id="sortSelect" class="ios-chip-select">
+                            <option value="date-desc">📅 Mới nhất</option>
+                            <option value="date-asc">📅 Cũ nhất</option>
+                            <option value="code-asc">🔤 Số hiệu A-Z</option>
+                            <option value="code-desc">🔤 Số hiệu Z-A</option>
+                            <option value="title-asc">📝 Tên A-Z</option>
+                        </select>
+                    </div>
+                    <div class="ios-chip-select-wrap">
+                        <select id="typeFilter" class="ios-chip-select">
+                            <option value="">📂 Loại: Tất cả</option>
+                            <option value="thongtu">📘 Thông tư</option>
+                            <option value="quyetdinh">📗 Quyết định</option>
+                            <option value="nghidinh">📙 Nghị định</option>
+                            <option value="ubnd">🏛️ UBND</option>
+                            <option value="pdf">📄 PDF</option>
+                            <option value="html">🌐 HTML</option>
+                        </select>
+                    </div>
+                    <div class="ios-chip-select-wrap">
+                        <select id="statusFilter" class="ios-chip-select">
+                            <option value="">⚡ Hiệu lực: Tất cả</option>
+                            <option value="active">✅ Hiệu lực</option>
+                            <option value="expired">❌ Hết hiệu lực</option>
+                        </select>
+                    </div>
+                    <select id="favoriteFilter" style="display:none;">
+                        <option value="">Tất cả</option>
+                        <option value="favorite">Yêu thích</option>
+                    </select>
+                    <button type="button" class="ios-chip ios-chip-clear" id="chipClearAll" onclick="clearFilters()" style="display:none;">
+                        ✕ Xóa lọc
+                    </button>
+                </div>
+
+                <!-- Bảng lọc chi tiết trượt ra khi cần -->
+                <div class="filter-bar" id="filterBar">
+                    <div class="filter-group">
+                        <label>Nhóm cơ quan</label>
+                        <select id="groupFilter">
+                            <option value="">Tất cả cơ quan</option>
+                            <option value="BXD">Bộ Xây dựng</option>
+                            <option value="CP">Chính phủ</option>
+                            <option value="UBND">UBND</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Lĩnh vực</label>
+                        <select id="fieldFilter">
+                            <option value="">Tất cả lĩnh vực</option>
+                            <option value="xaydung">Xây dựng</option>
+                            <option value="quyhoach">Quy hoạch</option>
+                            <option value="kinhtexaydung">Kinh tế xây dựng</option>
+                        </select>
+                    </div>
+                    <button class="clear-btn" onclick="clearFilters()">✕ Bỏ tất cả lọc</button>
+                    <span class="filter-badge" id="activeFilterBadge" style="display:none;">
+                        <span id="filterBadgeText">Lĩnh vực</span>
+                        <span class="close" onclick="clearFilters()">×</span>
+                    </span>
+                </div>
+
+                <!-- Dòng tóm tắt kết quả tinh tế thay thế 7 ô thống kê cồng kềnh -->
+                <div class="ios-stats-summary" onclick="openStatsModal()" title="Chạm để xem biểu đồ chi tiết">
+                    <span class="ios-stats-text" id="iosStatsText">Đang tải tài liệu...</span>
+                    <span class="ios-stats-link">📊 Chi tiết ›</span>
+                </div>
+                <!-- Ẩn các phần tử thống kê cũ để giữ tương thích 100% với JS hiện tại -->
+                <div class="stats-row" id="statsRow" style="display:none;">
+                    <span id="statResult">0</span>
+                    <span id="statActive">0</span>
+                    <span id="statTotal">0</span>
+                    <span id="statPdf">0</span>
+                    <span id="statHtml">0</span>
+                    <span id="statFavorite">0</span>
+                    <span id="statFolderCount">0</span>
+                </div>
             </div>
 
             <div class="cards-grid" id="cardsGrid"></div>
@@ -2375,6 +2706,152 @@
     </div>
 
     <!-- ═══════════ MODALS ═══════════ -->
+    
+    <!-- ═══════════ ACTION SHEET: THÊM TÀI LIỆU MỚI (SMART ADD) ═══════════ -->
+    <div class="modal modal-sheet" id="smartAddModal" onclick="if(event.target===this)closeSmartAddModal()">
+        <div class="modal-content sheet-content">
+            <div class="sheet-handle"></div>
+            <div class="modal-header">
+                <span>＋ Thêm tài liệu mới</span>
+                <button class="close" onclick="closeSmartAddModal()">✕</button>
+            </div>
+            <div class="sheet-grid">
+                <div class="sheet-item" onclick="closeSmartAddModal(); openPDFModal()">
+                    <div class="sheet-icon bg-red">📄</div>
+                    <div class="sheet-info">
+                        <strong>Tài liệu PDF</strong>
+                        <span>Nén tự động 3 cấp độ & trích xuất văn bản tìm kiếm</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeSmartAddModal(); openHTMLModal()">
+                    <div class="sheet-icon bg-teal">🌐</div>
+                    <div class="sheet-info">
+                        <strong>Tệp tin HTML</strong>
+                        <span>Nhập nhiều file cùng lúc, xem trước cách ly</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeSmartAddModal(); openAddModal()">
+                    <div class="sheet-icon bg-green">📝</div>
+                    <div class="sheet-info">
+                        <strong>Văn bản Pháp luật</strong>
+                        <span>Thông tư, Quyết định, Nghị định, UBND (thủ công)</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeSmartAddModal(); openImportModal()">
+                    <div class="sheet-icon bg-blue">📥</div>
+                    <div class="sheet-info">
+                        <strong>Nhập từ file JSON</strong>
+                        <span>Nhập hàng loạt tài liệu từ dữ liệu có sẵn</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+            </div>
+            <div class="sheet-footer">
+                <button type="button" class="btn btn-outline" style="width:100%;min-height:42px;" onclick="closeSmartAddModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ ACTION SHEET: MENU CÔNG CỤ & TIỆN ÍCH (TOOLS MENU) ═══════════ -->
+    <div class="modal modal-sheet" id="toolsMenuModal" onclick="if(event.target===this)closeToolsMenu()">
+        <div class="modal-content sheet-content">
+            <div class="sheet-handle"></div>
+            <div class="modal-header">
+                <span>⚙️ Công cụ & Tiện ích</span>
+                <button class="close" onclick="closeToolsMenu()">✕</button>
+            </div>
+            <div class="sheet-section-title">TRỰC QUAN HÓA & GIAO DIỆN</div>
+            <div class="sheet-grid">
+                <div class="sheet-item" onclick="closeToolsMenu(); toggleMindmapView()">
+                    <div class="sheet-icon bg-purple">🧠</div>
+                    <div class="sheet-info">
+                        <strong>Sơ đồ tư duy (Mindmap)</strong>
+                        <span>Xem liên kết cây thư mục & tài liệu trực quan</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); openStatsModal()">
+                    <div class="sheet-icon bg-green">📊</div>
+                    <div class="sheet-info">
+                        <strong>Thống kê & Biểu đồ</strong>
+                        <span>Phân tích tài liệu theo loại, hiệu lực và dung lượng</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="toggleTheme(); updateToolsThemeLabel()">
+                    <div class="sheet-icon bg-yellow" id="toolsThemeIcon">🌙</div>
+                    <div class="sheet-info">
+                        <strong id="toolsThemeTitle">Chế độ Sáng / Tối</strong>
+                        <span id="toolsThemeSubtitle">Chuyển đổi giao diện ban đêm</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+            </div>
+
+            <div class="sheet-section-title">DỮ LIỆU & SAO LƯU</div>
+            <div class="sheet-grid">
+                <div class="sheet-item" onclick="closeToolsMenu(); backupFullData()">
+                    <div class="sheet-icon bg-green">💾</div>
+                    <div class="sheet-info">
+                        <strong>Sao lưu toàn bộ (Backup)</strong>
+                        <span>Lưu tất cả tài liệu, PDF, HTML & thư mục ra file</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); restoreFullData()">
+                    <div class="sheet-icon bg-yellow">📥</div>
+                    <div class="sheet-info">
+                        <strong>Phục hồi dữ liệu (Restore)</strong>
+                        <span>Khôi phục tài liệu từ file sao lưu</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); exportCSV()">
+                    <div class="sheet-icon bg-teal">📊</div>
+                    <div class="sheet-info">
+                        <strong>Xuất bảng tính CSV / Excel</strong>
+                        <span>Xuất danh sách văn bản ra file bảng tính</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); exportJSON()">
+                    <div class="sheet-icon bg-blue">📤</div>
+                    <div class="sheet-info">
+                        <strong>Xuất tệp JSON</strong>
+                        <span>Xuất thông tin danh mục văn bản</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+            </div>
+
+            <div class="sheet-section-title">HỆ THỐNG</div>
+            <div class="sheet-grid">
+                <div class="sheet-item" onclick="closeToolsMenu(); openTrashModal()">
+                    <div class="sheet-icon bg-red">🗑️</div>
+                    <div class="sheet-info">
+                        <strong>Thùng rác</strong>
+                        <span>Xem và khôi phục tài liệu đã xóa (giữ 30 ngày)</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); showGuideModal()">
+                    <div class="sheet-icon bg-blue">📖</div>
+                    <div class="sheet-info">
+                        <strong>Hướng dẫn sử dụng</strong>
+                        <span>Xem các phím tắt và mẹo thao tác trên iPhone</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
+            </div>
+            <div class="sheet-footer">
+                <button type="button" class="btn btn-outline" style="width:100%;min-height:42px;" onclick="closeToolsMenu()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Add/Edit Modal -->
     <div class="modal" id="addModal">
         <div class="modal-content">
@@ -3901,9 +4378,13 @@
             document.getElementById('statActive').textContent = active;
             document.getElementById('statTotal').textContent = total;
             document.getElementById('statPdf').textContent = pdfs;
-            document.getElementById('statHtml').textContent = documents.filter(d => !!d.htmlData).length;
+            const htmlsCount = documents.filter(d => !!d.htmlData).length;
+            document.getElementById('statHtml').textContent = htmlsCount;
             document.getElementById('statFavorite').textContent = favs;
             document.getElementById('statFolderCount').textContent = folders.length;
+            if (typeof updateIosStatsDisplay === 'function') {
+                updateIosStatsDisplay(filtered.length, total, active, pdfs, htmlsCount, favs);
+            }
 
             const field = document.getElementById('fieldFilter').value;
             const badge = document.getElementById('activeFilterBadge');
