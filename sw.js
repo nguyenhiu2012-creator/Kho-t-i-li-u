@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kho-tai-lieu-pro-v1';
+const CACHE_NAME = 'kho-tai-lieu-pro-v3';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -29,6 +29,23 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+    // Với điều hướng trang HTML (Navigation): Network-First để luôn cập nhật bản mới nhất từ máy chủ
+    if (e.request.mode === 'navigate' || e.request.destination === 'document') {
+        e.respondWith(
+            fetch(e.request).then((networkResponse) => {
+                if (networkResponse && networkResponse.status === 200) {
+                    const responseToCache = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseToCache));
+                }
+                return networkResponse;
+            }).catch(() => {
+                return caches.match('./') || caches.match('./index.html');
+            })
+        );
+        return;
+    }
+
+    // Với tài nguyên tĩnh (CDN JS/CSS): Cache-First để tải nhanh và tiết kiệm dung lượng
     e.respondWith(
         caches.match(e.request).then((cachedResponse) => {
             if (cachedResponse) return cachedResponse;
@@ -41,10 +58,6 @@ self.addEventListener('fetch', (e) => {
                     cache.put(e.request, responseToCache);
                 });
                 return networkResponse;
-            }).catch(() => {
-                if (e.request.mode === 'navigate') {
-                    return caches.match('./') || caches.match('./index.html');
-                }
             });
         })
     );

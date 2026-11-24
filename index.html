@@ -1,4 +1,36 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);--sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px)}html{scroll-padding-top:var(--sat)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);--sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px)}html{scroll-padding-top:var(--sat)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+        /* ─── UNIFIED UPLOAD BOX TRONG FORM THÊM ─── */
+        .unified-file-box { margin-bottom: 12px; }
+        .unified-dropzone {
+            display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+            border: 1.5px dashed var(--green); background: var(--green-bg);
+            border-radius: 8px; cursor: pointer; transition: var(--transition);
+        }
+        .unified-dropzone:active, .unified-dropzone:hover { background: #dcfce7; border-color: #15803d; }
+        [data-theme="dark"] .unified-dropzone { background: rgba(22, 163, 74, 0.15); border-color: #4ade80; }
+        [data-theme="dark"] .unified-dropzone:active { background: rgba(22, 163, 74, 0.25); }
+        .unified-dropzone .drop-icon { font-size: 24px; flex-shrink: 0; }
+        .unified-dropzone .drop-text { display: flex; flex-direction: column; gap: 2px; }
+        .unified-dropzone .drop-text strong { font-size: 13px; color: var(--text); }
+        .unified-dropzone .drop-text span { font-size: 11px; color: var(--text-light); }
+        .unified-file-attached {
+            display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+        }
+        .unified-file-attached .file-icon { font-size: 22px; flex-shrink: 0; }
+        .unified-file-attached .file-details { flex: 1; min-width: 0; }
+        .unified-file-attached .file-name {
+            font-size: 13px; font-weight: 600; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .unified-file-attached .file-size { font-size: 11px; color: var(--text-light); }
+        .btn-remove-file {
+            background: none; border: none; font-size: 14px; color: var(--red);
+            cursor: pointer; padding: 4px 8px; border-radius: 4px;
+        }
+        .btn-remove-file:hover { background: var(--red-bg); }
+
+    </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -2457,67 +2489,143 @@
             .stats-row .stat-item { flex: 0 0 auto; white-space: nowrap; padding: 4px 10px; font-size: 12px; }
             .stats-row .stat-item .label { display: inline; }
 
-            /* Thư mục: danh sách dọc, mỗi thư mục là một hàng lớn, có đường kẻ cấp con */
-            .folder-sidebar .sidebar-header { padding: 2px 12px 8px; }
-            .folder-sidebar .sidebar-header h3 { font-size: 14px; letter-spacing: 0.4px; color: var(--text); }
-            .folder-sidebar .sidebar-header .btn-icon { min-width: 40px; min-height: 40px; font-size: 16px; }
-            .folder-sidebar .folder-list {
-                display: block; padding: 8px 10px; max-height: 42vh; overflow-y: auto;
-                -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+            /* Thư mục: Tinh gọn chuẩn iOS trên iPhone (nhẹ nhàng, không chiếm màn hình) */
+            .folder-sidebar {
+                background: var(--card-bg);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                margin-bottom: 8px;
+                padding: 4px 0 !important;
             }
-            .folder-sidebar .folder-list .folder-tree { display: block; width: 100%; }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node { display: block; }
+            .folder-sidebar .sidebar-header {
+                padding: 4px 10px 4px !important;
+                min-height: 28px !important;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .folder-sidebar .sidebar-header h3 {
+                font-size: 12px !important;
+                letter-spacing: 0.3px;
+                font-weight: 600;
+                color: var(--text-light);
+            }
+            .folder-sidebar .sidebar-header .btn-icon {
+                min-width: 28px !important;
+                min-height: 28px !important;
+                font-size: 13px !important;
+                padding: 2px !important;
+            }
+            .folder-sidebar .folder-list {
+                display: block;
+                padding: 2px 6px !important;
+                max-height: 150px !important;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+            }
+            .folder-sidebar .folder-list .folder-tree { display: block; width: 100%; margin: 0; padding: 0; }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node { display: block; margin: 0; padding: 0; }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item {
-                flex-wrap: wrap; align-items: center; gap: 4px 8px;
-                min-height: 50px; margin-bottom: 6px;
-                padding: 6px 10px 6px 4px !important;
-                border: 1px solid var(--border); border-radius: 10px;
-                background: var(--bg); color: var(--text);
-                white-space: normal; font-size: 16px; font-weight: 600;
+                flex-wrap: nowrap !important;
+                align-items: center;
+                gap: 6px !important;
+                min-height: 32px !important;
+                margin-bottom: 3px !important;
+                padding: 3px 8px !important;
+                border: 1px solid var(--border) !important;
+                border-radius: 6px !important;
+                background: var(--bg) !important;
+                color: var(--text) !important;
+                white-space: nowrap !important;
+                font-size: 13px !important;
+                font-weight: 500 !important;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active {
-                border: 2px solid var(--green); background: var(--green-bg); color: var(--green);
-                padding: 5px 9px 5px 3px !important;
+                border: 1.5px solid var(--green) !important;
+                background: var(--green-bg) !important;
+                color: var(--green) !important;
+                font-weight: 600 !important;
+                padding: 3px 8px !important;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .toggle-icon {
-                display: flex; align-items: center; justify-content: center;
-                width: 34px; height: 34px; font-size: 14px; border-radius: 8px;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                width: 20px !important;
+                height: 20px !important;
+                font-size: 10px !important;
+                border-radius: 4px !important;
+                flex-shrink: 0;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .toggle-icon:not([style*="transparent"]) {
-                background: var(--card-bg); color: var(--text);
+                background: var(--card-bg) !important;
+                color: var(--text) !important;
             }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-icon { font-size: 26px; line-height: 1; }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-icon {
+                font-size: 15px !important;
+                line-height: 1 !important;
+                flex-shrink: 0;
+            }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-name {
-                flex: 1 1 0; min-width: 0; font-size: 16px; line-height: 1.3;
-                white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere;
+                flex: 1 1 0 !important;
+                min-width: 0 !important;
+                font-size: 13px !important;
+                line-height: 1.2 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-count {
-                font-size: 14px; font-weight: 700; padding: 2px 10px; border-radius: 12px;
-                background: var(--card-bg); color: var(--text);
+                font-size: 11px !important;
+                font-weight: 600 !important;
+                padding: 1px 6px !important;
+                border-radius: 8px !important;
+                background: var(--card-bg) !important;
+                color: var(--text-light) !important;
+                flex-shrink: 0;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active .folder-count {
-                background: var(--green); color: #fff;
+                background: var(--green) !important;
+                color: #fff !important;
             }
-            /* Nút sửa / xóa / thêm con chỉ hiện ở thư mục đang chọn cho đỡ rối */
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-actions { display: none; }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-actions { display: none !important; }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active .folder-actions {
-                display: flex; flex: 1 0 100%; justify-content: flex-end; gap: 8px; padding-top: 2px;
+                display: flex !important;
+                flex: 0 0 auto !important;
+                justify-content: flex-end;
+                gap: 4px !important;
+                padding-top: 0 !important;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active .folder-actions button {
-                min-width: 44px; min-height: 40px; font-size: 18px;
-                border: 1px solid var(--border); background: var(--card-bg); border-radius: 8px;
+                min-width: 26px !important;
+                min-height: 26px !important;
+                font-size: 12px !important;
+                padding: 0 !important;
+                border: 1px solid var(--border) !important;
+                background: var(--card-bg) !important;
+                border-radius: 4px !important;
             }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active .folder-actions:empty { display: none; }
-            /* Thư mục con: thụt vào, có vạch dọc nối với thư mục cha */
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-children { display: none !important; }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-children.open {
-                display: block !important; margin: 0 0 0 20px; padding-left: 10px;
-                border-left: 3px solid var(--border);
+                display: block !important;
+                margin: 0 0 0 12px !important;
+                padding-left: 6px !important;
+                border-left: 2px solid var(--border) !important;
             }
-            .sidebar-footer { padding: 8px 10px 4px; }
+            .sidebar-footer {
+                padding: 4px 6px !important;
+                border-top: 1px solid var(--border);
+            }
             .sidebar-footer .btn-add-folder {
-                flex: 1 1 100%; min-height: 46px; font-size: 15px; font-weight: 600;
-                border: 2px dashed var(--green); color: var(--green); border-radius: 10px;
+                flex: 1 1 100% !important;
+                min-height: 28px !important;
+                font-size: 12px !important;
+                font-weight: 500 !important;
+                border: 1px dashed var(--green) !important;
+                color: var(--green) !important;
+                border-radius: 6px !important;
+                padding: 4px 8px !important;
             }
         }
     </style>
@@ -2528,7 +2636,7 @@
         </div>
         <div class="header-actions ios-header-actions">
             <button type="button" class="ios-btn-icon" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
-            <button type="button" class="ios-btn-primary" onclick="openSmartAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
+            <button type="button" class="ios-btn-primary" onclick="openAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
             <button type="button" class="ios-btn-icon" onclick="openToolsMenu()" title="Công cụ & Tiện ích">⋯</button>
         </div>
     </header>
@@ -2861,16 +2969,44 @@
             </div>
             <div id="addMessage" class="message"></div>
             <div class="form-group">
-                <label>Loại</label>
+                <label>Loại tài liệu</label>
                 <select id="docType">
                     <option value="thongtu">Thông tư</option>
                     <option value="quyetdinh">Quyết định</option>
                     <option value="nghidinh">Nghị định</option>
                     <option value="ubnd">UBND</option>
-                    <option value="pdf">PDF</option>
-                    <option value="html">HTML</option>
+                    <option value="pdf">📄 Tệp PDF</option>
+                    <option value="html">🌐 Trang HTML</option>
+                    <option value="khac">Khác</option>
                 </select>
             </div>
+
+            <!-- ─── KHU VỰC ĐÍNH KÈM TỆP HỢP NHẤT (PDF hoặc HTML) ─── -->
+            <div class="form-group unified-file-box">
+                <label>Đính kèm tệp <span style="font-weight:normal;color:var(--text-light);font-size:12px;">(PDF hoặc HTML - tự nhận diện)</span></label>
+                <input type="file" id="unifiedFileInput" accept=".pdf,.html,.htm,.xhtml" onchange="handleUnifiedFileSelect(event)" style="display:none;" />
+                <div id="unifiedDropZone" class="unified-dropzone" onclick="document.getElementById('unifiedFileInput').click()">
+                    <div class="drop-icon">📎</div>
+                    <div class="drop-text">
+                        <strong>Chạm để đính kèm tệp PDF hoặc HTML</strong>
+                        <span>Tự động trích xuất tiêu đề, số hiệu & tối ưu tệp</span>
+                    </div>
+                </div>
+                <div id="unifiedAttachedFileInfo" class="unified-file-attached" style="display:none;">
+                    <span class="file-icon" id="attachedFileIcon">📄</span>
+                    <div class="file-details">
+                        <div class="file-name" id="attachedFileName"></div>
+                        <div class="file-size" id="attachedFileSize"></div>
+                    </div>
+                    <button type="button" class="btn-remove-file" onclick="removeAttachedFile()" title="Gỡ file đính kèm">✕ Gỡ</button>
+                </div>
+                <div id="unifiedProgress" class="hidden" style="margin-top:6px;">
+                    <div style="font-size:12px;font-weight:500;">⏳ Đang xử lý...</div>
+                    <div class="progress-bar"><div class="fill" id="unifiedProgressFill" style="width:0%;"></div></div>
+                    <div class="progress-text" id="unifiedProgressText">0%</div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Thư mục</label>
                 <select id="docFolder"><option value="">Không</option></select>
@@ -4846,12 +4982,110 @@
         // ═══════════════════════════════════════════════
         //  CRUD (giữ nguyên từ bản cũ, chỉ bổ sung folderId)
         // ═══════════════════════════════════════════════
+        let currentAttachedFile = null;
+
+        async function handleUnifiedFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const ext = file.name.split('.').pop().toLowerCase();
+
+            if (ext === 'pdf') {
+                if (file.size > 100 * 1024 * 1024) {
+                    showAddMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa 100 MB`, 'error');
+                    event.target.value = '';
+                    return;
+                }
+                document.getElementById('docType').value = 'pdf';
+                const cleanName = file.name.replace(/\.pdf$/i, '').trim();
+                if (!document.getElementById('docCode').value) {
+                    document.getElementById('docCode').value = cleanName;
+                }
+                if (!document.getElementById('docTitle').value) {
+                    document.getElementById('docTitle').value = cleanName;
+                }
+
+                const prog = document.getElementById('unifiedProgress');
+                if (prog) prog.classList.remove('hidden');
+                document.getElementById('unifiedProgressFill').style.width = '40%';
+                document.getElementById('unifiedProgressText').textContent = 'Đang nén PDF...';
+
+                try {
+                    const compressed = await compressPDF(file, 'medium');
+                    currentAttachedFile = {
+                        type: 'pdf',
+                        data: compressed.data,
+                        filename: file.name,
+                        size: file.size,
+                        ratio: compressed.ratio
+                    };
+                    const savedRatio = (100 - parseFloat(compressed.ratio)).toFixed(0);
+                    showAttachedFileInfo('📄', file.name, `PDF ${formatFileSize(compressed.compressedSize || file.size)} (- ${savedRatio}%)`);
+                } catch (e) {
+                    showAddMessage('❌ Lỗi xử lý PDF: ' + e.message, 'error');
+                } finally {
+                    if (prog) prog.classList.add('hidden');
+                }
+            } else if (ext === 'html' || ext === 'htm' || ext === 'xhtml') {
+                if (file.size > MAX_HTML_SIZE) {
+                    showAddMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa ${formatFileSize(MAX_HTML_SIZE)}`, 'error');
+                    event.target.value = '';
+                    return;
+                }
+                document.getElementById('docType').value = 'html';
+                const cleanName = file.name.replace(/\.(html?|xhtml)$/i, '').trim();
+                if (!document.getElementById('docCode').value) {
+                    document.getElementById('docCode').value = cleanName;
+                }
+
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const htmlContent = decodeHtmlBuffer(buffer);
+                    const title = extractHtmlTitle(htmlContent) || cleanName;
+                    if (!document.getElementById('docTitle').value) {
+                        document.getElementById('docTitle').value = title;
+                    }
+                    currentAttachedFile = {
+                        type: 'html',
+                        content: htmlContent,
+                        filename: file.name,
+                        size: file.size
+                    };
+                    showAttachedFileInfo('🌐', file.name, `HTML ${formatFileSize(file.size)}`);
+                } catch (e) {
+                    showAddMessage('❌ Lỗi xử lý HTML: ' + e.message, 'error');
+                }
+            } else {
+                showAddMessage('⚠️ Vui lòng chọn tệp .pdf hoặc .html', 'warning');
+            }
+            event.target.value = '';
+        }
+
+        function showAttachedFileInfo(icon, name, sizeStr) {
+            document.getElementById('unifiedDropZone').style.display = 'none';
+            const info = document.getElementById('unifiedAttachedFileInfo');
+            info.style.display = 'flex';
+            document.getElementById('attachedFileIcon').textContent = icon;
+            document.getElementById('attachedFileName').textContent = name;
+            document.getElementById('attachedFileSize').textContent = sizeStr;
+        }
+
+        function removeAttachedFile() {
+            currentAttachedFile = null;
+            const info = document.getElementById('unifiedAttachedFileInfo');
+            if (info) info.style.display = 'none';
+            const dz = document.getElementById('unifiedDropZone');
+            if (dz) dz.style.display = 'flex';
+            const inp = document.getElementById('unifiedFileInput');
+            if (inp) inp.value = '';
+        }
+
         function openAddModal() {
             currentEditId = null;
             document.getElementById('modalTitle').textContent = 'Thêm tài liệu';
             document.getElementById('addMessage').className = 'message';
             document.getElementById('addMessage').textContent = '';
             clearForm();
+            removeAttachedFile();
             populateFolderSelects();
             document.getElementById('addModal').classList.add('active');
         }
@@ -4864,32 +5098,48 @@
             document.getElementById('docCode').value = '';
             document.getElementById('docTitle').value = '';
             document.getElementById('docAuthor').value = '';
-            document.getElementById('docIssuedDate').value = '';
+            document.getElementById('docIssuedDate').value = new Date().toISOString().split('T')[0];
             document.getElementById('docEffectiveDate').value = '';
             document.getElementById('docStatus').value = 'active';
             document.getElementById('docNotes').value = '';
+            removeAttachedFile();
         }
 
         async function saveDocument() {
+            let docType = document.getElementById('docType').value;
+            if (currentAttachedFile) {
+                docType = currentAttachedFile.type;
+            }
             const doc = {
                 id: currentEditId || Date.now(),
-                type: document.getElementById('docType').value,
+                type: docType,
                 folderId: document.getElementById('docFolder').value || null,
                 code: document.getElementById('docCode').value.trim(),
                 title: document.getElementById('docTitle').value.trim(),
                 author: document.getElementById('docAuthor').value.trim(),
-                issuedDate: document.getElementById('docIssuedDate').value,
+                issuedDate: document.getElementById('docIssuedDate').value || new Date().toISOString().split('T')[0],
                 effectiveDate: document.getElementById('docEffectiveDate').value,
                 status: document.getElementById('docStatus').value,
                 notes: document.getElementById('docNotes').value.trim(),
                 favorite: false,
             };
             if (!doc.code || !doc.title) { showAddMessage('Vui lòng nhập số hiệu và trích yếu', 'error'); return; }
+
+            if (currentAttachedFile) {
+                if (currentAttachedFile.type === 'pdf') {
+                    doc.pdfData = currentAttachedFile.data;
+                    doc.pdfFilename = currentAttachedFile.filename;
+                    doc.compressedRatio = (100 - parseFloat(currentAttachedFile.ratio || 0)).toFixed(1);
+                } else if (currentAttachedFile.type === 'html') {
+                    doc.htmlContent = currentAttachedFile.content;
+                    doc.htmlFilename = currentAttachedFile.filename;
+                }
+            }
+
             try {
                 if (currentEditId) {
                     const existing = documents.find(d => d.id === currentEditId);
                     if (existing) {
-                        // Giữ nguyên mọi trường không có trong form (PDF, HTML đính kèm...)
                         Object.keys(existing).forEach(k => { if (!(k in doc)) doc[k] = existing[k]; });
                         doc.favorite = existing.favorite || false;
                     }
@@ -4911,7 +5161,7 @@
             const doc = documents.find(d => d.id === id);
             if (!doc) return;
             currentEditId = id;
-            document.getElementById('modalTitle').textContent = 'Chỉnh sửa';
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa tài liệu';
             document.getElementById('addMessage').className = 'message';
             document.getElementById('addMessage').textContent = '';
             populateFolderSelects();
@@ -4924,6 +5174,25 @@
             document.getElementById('docEffectiveDate').value = doc.effectiveDate || '';
             document.getElementById('docStatus').value = doc.status;
             document.getElementById('docNotes').value = doc.notes || '';
+
+            if (doc.type === 'pdf' && doc.pdfData) {
+                currentAttachedFile = {
+                    type: 'pdf',
+                    data: doc.pdfData,
+                    filename: doc.pdfFilename || 'tailieu.pdf',
+                    ratio: doc.compressedRatio || '0'
+                };
+                showAttachedFileInfo('📄', doc.pdfFilename || 'tailieu.pdf', 'Tệp PDF đính kèm');
+            } else if (doc.type === 'html' && doc.htmlContent) {
+                currentAttachedFile = {
+                    type: 'html',
+                    content: doc.htmlContent,
+                    filename: doc.htmlFilename || 'trang.html'
+                };
+                showAttachedFileInfo('🌐', doc.htmlFilename || 'trang.html', 'Tệp HTML đính kèm');
+            } else {
+                removeAttachedFile();
+            }
             document.getElementById('addModal').classList.add('active');
         }
 
@@ -5901,8 +6170,32 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then((reg) => {
                     console.log('✅ ServiceWorker Offline PWA sẵn sàng:', reg.scope);
+                    
+                    // Chủ động kiểm tra cập nhật trên máy chủ
+                    reg.update();
+
+                    // Lắng nghe khi có bản cập nhật mới được tải về
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        if (installingWorker) {
+                            installingWorker.onstatechange = () => {
+                                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showToast('✨ Đã phát hiện phiên bản mới! Ứng dụng sẽ tự làm mới...', 'info');
+                                    setTimeout(() => window.location.reload(), 1500);
+                                }
+                            };
+                        }
+                    };
                 }).catch((err) => {
                     console.log('ℹ️ ServiceWorker:', err.message);
+                });
+
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        window.location.reload();
+                    }
                 });
             });
         }
