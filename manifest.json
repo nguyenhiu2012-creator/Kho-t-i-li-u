@@ -1,0 +1,17 @@
+{
+  "name": "Kho Tài Liệu Pro",
+  "short_name": "Kho Tài Liệu",
+  "description": "Kho lưu trữ, quản lý văn bản, nén PDF và sơ đồ tư duy chuyên nghiệp",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#16a34a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADGklEQVR42u3dvVEcQRCG4d4pHGUgR2Boo6BkEIGqRAJHAKQgixQIQAmIGGSoiEFVOgdLZIAHuBh3V3U/OrpnnrfOZ3b2vZ7ej9m56dPXPwGsopkCkAPkADlADpAD5AA50AknMZkErJODHbCsgBwgB8gBcoAcIAdCCAYhGCwrADlADuzdc+g4oHKAHJBzQOUAOSAhRTk5UvNwN1eZyl/Ll4t562/a2eUy7RVNp9/+0uJQckTEDn6kVaQx438o0sf1Nmbwo4wc1c3oyY8WU+T59GHGvn6kuR1yjnR+WFZWfWl+zvxINQ8t0aKifryJGDJ8LCvWF/9b4Qc5+EEOfoyWc/AjVz+qcqgfGyqHwpHQjyR3ROVQPzSk/JCQ9uKHhBS56wc5+EEOfgjBOvFDCIbk9YMc/IiqLzUVYrc3VoRgCO/K4lBMKgcsK3CyD/paVVQOkAPkADlADgjBIASDg/HRS8whBGOHZQXkADlADtgmuCNfbp6qDPX39w8qBzN6GG3td2UrzvWWY05xR+Qccg4NKciB0eWo2PxXHHPVylFrros+yhbOOYrOuMoBciBsE0SMGHQIwbhhWQE5QA7Yfb6R2/vnKkO9Pm8Vd583ZhhtV3JUnOuKY9ZzQM4Rcg4JKTsGX1a2bf6Neayeo9ZcVzSj9n6OojOucoAcIAfIAQjBQswhBGOHZQVyjnA+h8rhfA5yDDbXFces5wA5IOfwJHvIylHxp+y7P58jyR1xPofR9piQdn0+h4QUnlZADpAD5ACEYB5WVA4MtZ/jaO+tD/uCTMmf1DjyiQbvcXpCijvifI6eT1/Rc4AcIAcyyVGwHz3+48Ox/2KOO+J8Do+yzueAngN2goV/rqgcIAccjA8H48NmH9jsAw0pQA6QAxJSHanKgcHlmBeP7keqeZBzWFKKLCvz1ejFI9UMNLPj2is1pGP6kfCqm5lyvWubn8+Lf5lnbfnjIy3eUQ4PkBCCgRwIIRhUDpADdp9D5QA5QA7YJgjIOWBZATlADpAD5AA5QA6EEAxCMMCyAnKAHCAHyAFygByIirvPJ0EHVvMK19y1TVXQf3wAAAAASUVORK5CYII=",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
