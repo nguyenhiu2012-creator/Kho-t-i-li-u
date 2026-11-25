@@ -316,6 +316,150 @@
             transform: scale(0.97);
         }
 
+    
+        /* ─── TRÌNH ĐỌC PDF CUỘN DỌC, PINCH-TO-ZOOM & TÌM KIẾM TRỰC TIẾP ─── */
+        .pdf-in-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 8px;
+            margin-bottom: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .pdf-in-search-bar input {
+            flex: 1;
+            min-width: 0;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            color: var(--text);
+            outline: none;
+        }
+        .pdf-in-search-bar button {
+            min-width: 28px;
+            min-height: 28px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 0 6px;
+        }
+        .pdf-search-count {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+        .pdf-in-search-snippet {
+            font-size: 12px;
+            padding: 5px 10px;
+            margin-bottom: 6px;
+            background: #fef9c3;
+            color: #713f12;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            flex-shrink: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        [data-theme="dark"] .pdf-in-search-snippet {
+            background: rgba(234, 179, 8, 0.18);
+            color: #fef08a;
+            border-color: rgba(234, 179, 8, 0.35);
+        }
+        .pdf-in-search-snippet mark {
+            background: #facc15;
+            color: #000;
+            padding: 0 2px;
+            border-radius: 2px;
+            font-weight: 700;
+        }
+        .pdf-scroll-area {
+            flex: 1;
+            min-height: 0;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 4px;
+            position: relative;
+        }
+        [data-theme="dark"] .pdf-scroll-area {
+            background: #0f172a;
+        }
+        .pdf-pages-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transform-origin: top center;
+            will-change: transform;
+        }
+        .pdf-page-slot {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .pdf-page-slot.search-highlight {
+            outline: 3px solid #f59e0b;
+        }
+        .pdf-page-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(15, 23, 42, 0.65);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        .pdf-page-canvas {
+            display: block;
+            max-width: none;
+        }
+        .pdf-ctrl-sep {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+            margin: 0 2px;
+        }
+        .modal.fullscreen-viewer-modal .pdf-viewer-container {
+            overflow: hidden !important;
+        }
+        .modal.fullscreen-viewer-modal .pdf-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            padding: 8px 4px 2px;
+        }
+        .modal.fullscreen-viewer-modal .pdf-controls button {
+            min-height: 32px;
+            min-width: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3375,17 +3519,34 @@
     <div class="modal fullscreen-viewer-modal" id="previewModal">
         <div class="modal-content wide">
             <div class="modal-header">
-                <span id="previewTitle">📄 Xem trước PDF</span>
-                <button class="close" onclick="closePreviewModal()">✕</button>
+                <span id="previewTitle" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📄 Xem trước PDF</span>
+                <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                    <button type="button" class="ios-btn-icon" id="pdfSearchToggleBtn" onclick="togglePdfSearchBar()" title="Tìm chữ trong PDF" style="width:32px;height:32px;min-height:32px;font-size:14px;">🔍</button>
+                    <button class="close" onclick="closePreviewModal()">✕</button>
+                </div>
             </div>
+            <div id="pdfSearchBar" class="pdf-in-search-bar" style="display:none;">
+                <input type="text" id="pdfSearchInput" placeholder="Tìm chữ trong tài liệu PDF..." autocomplete="off" oninput="runInPdfSearch()" />
+                <span id="pdfSearchCount" class="pdf-search-count">0/0</span>
+                <button type="button" onclick="prevPdfHit()" title="Kết quả trước">▲</button>
+                <button type="button" onclick="nextPdfHit()" title="Kết quả tiếp">▼</button>
+                <button type="button" onclick="clearInPdfSearch()" title="Đóng">✕</button>
+            </div>
+            <div id="pdfSearchSnippet" class="pdf-in-search-snippet" style="display:none;"></div>
             <div id="previewContent">
                 <div class="pdf-viewer-container" id="pdfViewerContainer">
-                    <canvas id="pdfCanvas"></canvas>
+                    <div class="pdf-scroll-area" id="pdfScrollArea">
+                        <div class="pdf-pages-list" id="pdfPagesList"></div>
+                    </div>
                     <div class="pdf-controls">
-                        <button onclick="prevPage()">◀</button>
-                        <span id="pageInfo">1/1</span>
-                        <button onclick="nextPage()">▶</button>
-                        <button onclick="downloadPDFFromPreview()" class="btn btn-success" style="padding:3px 12px;font-size:12px;">⬇️ Tải</button>
+                        <button type="button" onclick="prevPage()" title="Trang trước">◀</button>
+                        <span id="pageInfo" style="font-size:12px;font-weight:600;min-width:44px;text-align:center;">1/1</span>
+                        <button type="button" onclick="nextPage()" title="Trang sau">▶</button>
+                        <span class="pdf-ctrl-sep"></span>
+                        <button type="button" onclick="zoomPdf(-0.25)" title="Thu nhỏ">−</button>
+                        <button type="button" id="pdfZoomLabel" onclick="resetPdfZoom()" title="Đặt lại 100%" style="min-width:44px;">100%</button>
+                        <button type="button" onclick="zoomPdf(0.25)" title="Phóng to">＋</button>
+                        <button type="button" onclick="downloadPDFFromPreview()" class="btn btn-success" style="padding:4px 10px;font-size:12px;margin-left:auto;background:var(--green);color:#fff;border-color:var(--green);">⬇️ Tải</button>
                     </div>
                 </div>
                 <div id="previewError" style="color:var(--red);text-align:center;padding:14px;display:none;">❌ Không thể tải PDF</div>
@@ -5520,14 +5681,26 @@
 
         let currentRenderTask = null; // Quản lý RenderTask của pdf.js để tránh race condition và giải phóng RAM
 
+        let pdfZoomScale = 1.0;
+        let pdfObserver = null;
+        let pdfRenderedSet = new Set();
+        let pdfRenderingSet = new Set();
+        let pdfPageBaseSize = { width: 595, height: 842 };
+        let inPdfHits = [];
+        let inPdfHitIdx = -1;
+        let inPdfTextPages = null;
+        let pdfPinchBound = false;
+
         async function openPreviewModal(id, page) {
             const doc = documents.find(d => d.id === id);
             if (!doc || !doc.pdfData) { alert('Không có PDF'); return; }
-            if (pdfDoc) {
-                try { await pdfDoc.destroy(); } catch (e) {}
-                pdfDoc = null;
-            }
+            await closePreviewCleanupOnly();
             currentPreviewId = id;
+            pdfZoomScale = 1.0;
+            updatePdfZoomLabel();
+            inPdfTextPages = doc.pdfText ? doc.pdfText.split('\f') : null;
+            clearInPdfSearch(true);
+
             document.getElementById('previewTitle').textContent = `📄 ${doc.code}`;
             document.getElementById('previewModal').classList.add('active');
             try {
@@ -5537,71 +5710,397 @@
                 totalPages = pdfDoc.numPages;
                 currentPage = Math.min(Math.max(parseInt(page, 10) || 1, 1), totalPages);
                 document.getElementById('previewError').style.display = 'none';
-                document.getElementById('pdfViewerContainer').style.display = 'block';
-                renderPage(currentPage);
-            } catch (e) { console.error(e);
+                document.getElementById('pdfViewerContainer').style.display = 'flex';
+
+                const firstPage = await pdfDoc.getPage(1);
+                const vp1 = firstPage.getViewport({ scale: 1 });
+                pdfPageBaseSize = { width: vp1.width, height: vp1.height };
+
+                buildPdfPageSlots();
+                bindPdfGestures();
+                if (currentPage > 1) {
+                    setTimeout(() => scrollToPdfPage(currentPage, false), 60);
+                } else {
+                    document.getElementById('pageInfo').textContent = `1/${totalPages}`;
+                }
+            } catch (e) {
+                console.error(e);
                 document.getElementById('previewError').textContent = '❌ Không thể mở PDF: ' + (e && e.message ? e.message : 'lỗi không xác định');
                 document.getElementById('previewError').style.display = 'block';
-                document.getElementById('pdfViewerContainer').style.display = 'none'; }
-        }
-
-        function closePreviewModal() {
-            document.getElementById('previewModal').classList.remove('active');
-            if (currentRenderTask) {
-                try { currentRenderTask.cancel(); } catch (e) {}
-                currentRenderTask = null;
-            }
-            if (pdfDoc) {
-                try { pdfDoc.destroy(); } catch (e) {}
-                pdfDoc = null;
-            }
-            currentPreviewId = null;
-            const canvas = document.getElementById('pdfCanvas');
-            if (canvas) {
-                canvas.width = 1;
-                canvas.height = 1;
-                const ctx = canvas.getContext('2d');
-                if (ctx) ctx.clearRect(0, 0, 1, 1);
+                document.getElementById('pdfViewerContainer').style.display = 'none';
             }
         }
 
-        async function renderPage(pn) {
-            if (!pdfDoc) return;
+        function getPdfSlotCssWidth() {
+            const area = document.getElementById('pdfScrollArea');
+            const baseW = area && area.clientWidth > 40 ? area.clientWidth - 16 : 360;
+            return Math.max(240, Math.min(baseW, 900)) * pdfZoomScale;
+        }
+
+        function buildPdfPageSlots() {
+            const list = document.getElementById('pdfPagesList');
+            if (!list) return;
+            list.innerHTML = '';
+            pdfRenderedSet.clear();
+            pdfRenderingSet.clear();
+            if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
+
+            const slotW = Math.floor(getPdfSlotCssWidth());
+            const estH = Math.floor(slotW * (pdfPageBaseSize.height / pdfPageBaseSize.width));
+
+            for (let p = 1; p <= totalPages; p++) {
+                const slot = document.createElement('div');
+                slot.className = 'pdf-page-slot';
+                slot.dataset.page = String(p);
+                slot.style.width = slotW + 'px';
+                slot.style.minHeight = estH + 'px';
+
+                const badge = document.createElement('span');
+                badge.className = 'pdf-page-badge';
+                badge.textContent = `${p}/${totalPages}`;
+                slot.appendChild(badge);
+
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-page-canvas';
+                slot.appendChild(canvas);
+                list.appendChild(slot);
+            }
+
+            const area = document.getElementById('pdfScrollArea');
+            pdfObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const pn = parseInt(entry.target.dataset.page, 10);
+                    if (entry.isIntersecting) {
+                        renderSlotPage(pn);
+                    }
+                });
+                updateCurrentVisiblePdfPage();
+            }, { root: area, rootMargin: '350px 0px', threshold: 0.05 });
+
+            list.querySelectorAll('.pdf-page-slot').forEach(slot => pdfObserver.observe(slot));
+            renderSlotPage(currentPage);
+        }
+
+        function updateCurrentVisiblePdfPage() {
+            const area = document.getElementById('pdfScrollArea');
+            if (!area) return;
+            const slots = area.querySelectorAll('.pdf-page-slot');
+            if (!slots.length) return;
+            const midY = area.scrollTop + area.clientHeight * 0.35;
+            let best = 1;
+            for (const s of slots) {
+                if (s.offsetTop <= midY) best = parseInt(s.dataset.page, 10);
+                else break;
+            }
+            currentPage = best;
+            const pi = document.getElementById('pageInfo');
+            if (pi) pi.textContent = `${currentPage}/${totalPages}`;
+        }
+
+        async function renderSlotPage(pn) {
+            if (!pdfDoc || pdfRenderedSet.has(pn) || pdfRenderingSet.has(pn)) return;
+            const slot = document.querySelector(`.pdf-page-slot[data-page="${pn}"]`);
+            if (!slot) return;
+            const canvas = slot.querySelector('canvas');
+            if (!canvas) return;
+
+            pdfRenderingSet.add(pn);
             try {
-                if (currentRenderTask) {
-                    try { currentRenderTask.cancel(); } catch (e) {}
-                    currentRenderTask = null;
-                }
                 const page = await pdfDoc.getPage(pn);
-                const canvas = document.getElementById('pdfCanvas'),
-                    ctx = canvas.getContext('2d');
+                if (!pdfDoc) return;
+                const ctx = canvas.getContext('2d');
                 const base = page.getViewport({ scale: 1 });
-                const holder = document.getElementById('pdfViewerContainer');
-                const cssW = Math.max(240, Math.min(holder.clientWidth - 24 || 600, 900));
-                let k = cssW / base.width;
+                const cssW = getPdfSlotCssWidth();
+                const k = cssW / base.width;
                 // Giới hạn DPR tối đa 2.0 trên màn hình Retina 3x của iPhone Pro Max để bảo toàn RAM GPU
                 let dpr = Math.min(window.devicePixelRatio || 1, 2.0);
                 while (base.width * k * dpr * base.height * k * dpr > 12e6 && dpr > 1) dpr -= 0.5;
                 const vp = page.getViewport({ scale: k * dpr });
                 canvas.width = Math.floor(vp.width);
                 canvas.height = Math.floor(vp.height);
-                canvas.style.width = Math.floor(vp.width / dpr) + 'px';
-                canvas.style.height = 'auto';
+                const dispW = Math.floor(vp.width / dpr);
+                const dispH = Math.floor(vp.height / dpr);
+                canvas.style.width = dispW + 'px';
+                canvas.style.height = dispH + 'px';
+                slot.style.width = dispW + 'px';
+                slot.style.minHeight = dispH + 'px';
+
                 currentRenderTask = page.render({ canvasContext: ctx, viewport: vp });
                 await currentRenderTask.promise;
                 currentRenderTask = null;
-                document.getElementById('pageInfo').textContent = `Trang ${pn}/${totalPages}`;
+                pdfRenderedSet.add(pn);
+
+                // Giải phóng bớt canvas ở xa (> 12 trang) để bảo vệ RAM iPhone
+                if (totalPages > 16) {
+                    pdfRenderedSet.forEach(rp => {
+                        if (Math.abs(rp - currentPage) > 12) {
+                            const farSlot = document.querySelector(`.pdf-page-slot[data-page="${rp}"]`);
+                            const farCanvas = farSlot ? farSlot.querySelector('canvas') : null;
+                            if (farCanvas) {
+                                farCanvas.width = 1;
+                                farCanvas.height = 1;
+                            }
+                            pdfRenderedSet.delete(rp);
+                        }
+                    });
+                }
             } catch (e) {
                 if (e && e.name === 'RenderingCancelledException') return;
                 console.error(e);
+            } finally {
+                pdfRenderingSet.delete(pn);
             }
         }
 
-        function nextPage() { if (currentPage < totalPages) { currentPage++;
-                renderPage(currentPage); } }
+        function scrollToPdfPage(pn, smooth = true) {
+            const target = document.querySelector(`.pdf-page-slot[data-page="${pn}"]`);
+            const area = document.getElementById('pdfScrollArea');
+            if (target && area) {
+                area.scrollTo({ top: Math.max(0, target.offsetTop - 6), behavior: smooth ? 'smooth' : 'auto' });
+                currentPage = pn;
+                const pi = document.getElementById('pageInfo');
+                if (pi) pi.textContent = `${pn}/${totalPages}`;
+                renderSlotPage(pn);
+            }
+        }
 
-        function prevPage() { if (currentPage > 1) { currentPage--;
-                renderPage(currentPage); } }
+        function nextPage() { if (currentPage < totalPages) scrollToPdfPage(currentPage + 1); }
+        function prevPage() { if (currentPage > 1) scrollToPdfPage(currentPage - 1); }
+
+        function updatePdfZoomLabel() {
+            const lbl = document.getElementById('pdfZoomLabel');
+            if (lbl) lbl.textContent = Math.round(pdfZoomScale * 100) + '%';
+        }
+
+        function zoomPdf(delta) {
+            const next = Math.min(3.0, Math.max(0.75, Math.round((pdfZoomScale + delta) * 100) / 100));
+            if (next === pdfZoomScale) return;
+            const keepPage = currentPage;
+            pdfZoomScale = next;
+            updatePdfZoomLabel();
+            if (pdfDoc) {
+                buildPdfPageSlots();
+                scrollToPdfPage(keepPage, false);
+            }
+        }
+
+        function resetPdfZoom() {
+            if (pdfZoomScale === 1.0) return;
+            const keepPage = currentPage;
+            pdfZoomScale = 1.0;
+            updatePdfZoomLabel();
+            if (pdfDoc) {
+                buildPdfPageSlots();
+                scrollToPdfPage(keepPage, false);
+            }
+        }
+
+        function bindPdfGestures() {
+            if (pdfPinchBound) return;
+            const area = document.getElementById('pdfScrollArea');
+            const list = document.getElementById('pdfPagesList');
+            if (!area || !list) return;
+            pdfPinchBound = true;
+
+            area.addEventListener('scroll', () => updateCurrentVisiblePdfPage(), { passive: true });
+
+            let startDist = 0, pinchRatio = 1, lastTap = 0;
+            area.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    startDist = Math.hypot(dx, dy);
+                    pinchRatio = 1;
+                }
+            }, { passive: true });
+
+            area.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2 && startDist > 0) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const dist = Math.hypot(dx, dy);
+                    pinchRatio = Math.min(2.5, Math.max(0.5, dist / startDist));
+                    list.style.transform = `scale(${pinchRatio})`;
+                }
+            }, { passive: true });
+
+            area.addEventListener('touchend', (e) => {
+                if (startDist > 0 && e.touches.length < 2) {
+                    list.style.transform = '';
+                    if (Math.abs(pinchRatio - 1) > 0.12) {
+                        const next = Math.min(3.0, Math.max(0.75, Math.round(pdfZoomScale * pinchRatio * 20) / 20));
+                        if (next !== pdfZoomScale) {
+                            const keepPage = currentPage;
+                            pdfZoomScale = next;
+                            updatePdfZoomLabel();
+                            buildPdfPageSlots();
+                            scrollToPdfPage(keepPage, false);
+                        }
+                    }
+                    startDist = 0;
+                    pinchRatio = 1;
+                    return;
+                }
+                if (e.touches.length === 0 && e.changedTouches.length === 1) {
+                    const now = Date.now();
+                    if (now - lastTap < 280) {
+                        const next = pdfZoomScale > 1.2 ? 1.0 : 1.75;
+                        const keepPage = currentPage;
+                        pdfZoomScale = next;
+                        updatePdfZoomLabel();
+                        buildPdfPageSlots();
+                        scrollToPdfPage(keepPage, false);
+                        lastTap = 0;
+                    } else {
+                        lastTap = now;
+                    }
+                }
+            }, { passive: true });
+        }
+
+        function togglePdfSearchBar() {
+            const bar = document.getElementById('pdfSearchBar');
+            const btn = document.getElementById('pdfSearchToggleBtn');
+            const inp = document.getElementById('pdfSearchInput');
+            if (!bar) return;
+            const open = bar.style.display === 'none';
+            bar.style.display = open ? 'flex' : 'none';
+            if (btn) btn.classList.toggle('active', open);
+            if (open && inp) {
+                setTimeout(() => inp.focus(), 50);
+            } else {
+                const snip = document.getElementById('pdfSearchSnippet');
+                if (snip) snip.style.display = 'none';
+            }
+        }
+
+        function clearInPdfSearch(silent = false) {
+            const inp = document.getElementById('pdfSearchInput');
+            const cnt = document.getElementById('pdfSearchCount');
+            const snip = document.getElementById('pdfSearchSnippet');
+            const bar = document.getElementById('pdfSearchBar');
+            const btn = document.getElementById('pdfSearchToggleBtn');
+            if (inp) inp.value = '';
+            if (cnt) cnt.textContent = '0/0';
+            if (snip) snip.style.display = 'none';
+            if (bar && !silent) bar.style.display = 'none';
+            if (btn && !silent) btn.classList.remove('active');
+            inPdfHits = [];
+            inPdfHitIdx = -1;
+            document.querySelectorAll('.pdf-page-slot.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+        }
+
+        async function ensureInPdfTextPages() {
+            if (inPdfTextPages || !pdfDoc) return inPdfTextPages;
+            const pages = [];
+            for (let n = 1; n <= totalPages; n++) {
+                const page = await pdfDoc.getPage(n);
+                const tc = await page.getTextContent();
+                const s = tc.items.map(it => it.str || '').join(' ').replace(/\s+/g, ' ').trim();
+                pages.push(s);
+                try { page.cleanup(); } catch (e) {}
+            }
+            inPdfTextPages = pages;
+            return pages;
+        }
+
+        async function runInPdfSearch() {
+            const inp = document.getElementById('pdfSearchInput');
+            const cnt = document.getElementById('pdfSearchCount');
+            const snip = document.getElementById('pdfSearchSnippet');
+            if (!inp || !pdfDoc) return;
+            const q = inp.value.trim();
+            document.querySelectorAll('.pdf-page-slot.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+            if (q.length < 2) {
+                inPdfHits = [];
+                inPdfHitIdx = -1;
+                if (cnt) cnt.textContent = '0/0';
+                if (snip) snip.style.display = 'none';
+                return;
+            }
+            const pages = await ensureInPdfTextPages();
+            const fq = foldVietnamese(q);
+            inPdfHits = [];
+            pages.forEach((raw, idx) => {
+                const f = foldWithMap(raw);
+                let pos = f.text.indexOf(fq);
+                if (pos !== -1) {
+                    const os = f.map[pos], oe = f.map[Math.min(pos + fq.length - 1, f.map.length - 1)] + 1;
+                    const before = raw.slice(Math.max(0, os - 25), os);
+                    const mid = raw.slice(os, oe);
+                    const after = raw.slice(oe, oe + 40);
+                    inPdfHits.push({ page: idx + 1, before, mid, after });
+                }
+            });
+            if (inPdfHits.length > 0) {
+                inPdfHitIdx = 0;
+                jumpToInPdfHit();
+            } else {
+                inPdfHitIdx = -1;
+                if (cnt) cnt.textContent = '0/0';
+                if (snip) {
+                    snip.textContent = 'Không tìm thấy từ khóa trong tài liệu';
+                    snip.style.display = 'block';
+                }
+            }
+        }
+
+        function jumpToInPdfHit() {
+            const cnt = document.getElementById('pdfSearchCount');
+            const snip = document.getElementById('pdfSearchSnippet');
+            if (!inPdfHits.length || inPdfHitIdx < 0) return;
+            const hit = inPdfHits[inPdfHitIdx];
+            if (cnt) cnt.textContent = `${inPdfHitIdx + 1}/${inPdfHits.length}`;
+            if (snip) {
+                snip.innerHTML = `Trang ${hit.page}: …${esc(hit.before)}<mark>${esc(hit.mid)}</mark>${esc(hit.after)}…`;
+                snip.style.display = 'block';
+            }
+            document.querySelectorAll('.pdf-page-slot.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+            const slot = document.querySelector(`.pdf-page-slot[data-page="${hit.page}"]`);
+            if (slot) slot.classList.add('search-highlight');
+            scrollToPdfPage(hit.page, true);
+        }
+
+        function nextPdfHit() {
+            if (!inPdfHits.length) return;
+            inPdfHitIdx = (inPdfHitIdx + 1) % inPdfHits.length;
+            jumpToInPdfHit();
+        }
+
+        function prevPdfHit() {
+            if (!inPdfHits.length) return;
+            inPdfHitIdx = (inPdfHitIdx - 1 + inPdfHits.length) % inPdfHits.length;
+            jumpToInPdfHit();
+        }
+
+        async function closePreviewCleanupOnly() {
+            if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
+            if (currentRenderTask) {
+                try { currentRenderTask.cancel(); } catch (e) {}
+                currentRenderTask = null;
+            }
+            if (pdfDoc) {
+                try { await pdfDoc.destroy(); } catch (e) {}
+                pdfDoc = null;
+            }
+            document.querySelectorAll('.pdf-page-canvas').forEach(canvas => {
+                canvas.width = 1;
+                canvas.height = 1;
+                const ctx = canvas.getContext('2d');
+                if (ctx) ctx.clearRect(0, 0, 1, 1);
+            });
+            const list = document.getElementById('pdfPagesList');
+            if (list) list.innerHTML = '';
+            pdfRenderedSet.clear();
+            pdfRenderingSet.clear();
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.remove('active');
+            clearInPdfSearch(false);
+            closePreviewCleanupOnly();
+            currentPreviewId = null;
+        }
 
         function downloadPDFFromPreview() { if (currentPreviewId) downloadPDF(currentPreviewId); }
 
