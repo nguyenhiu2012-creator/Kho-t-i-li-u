@@ -1,7 +1,8 @@
-const CACHE_NAME = 'kho-tai-lieu-pro-v14';
+const CACHE_NAME = 'kho-tai-lieu-pro-v16';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
+    './manifest.json',
     'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
@@ -29,7 +30,6 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-    // Với điều hướng trang HTML (Navigation): Network-First để luôn cập nhật bản mới nhất từ máy chủ
     if (e.request.mode === 'navigate' || e.request.destination === 'document') {
         e.respondWith(
             fetch(e.request).then((networkResponse) => {
@@ -45,7 +45,6 @@ self.addEventListener('fetch', (e) => {
         return;
     }
 
-    // Với tài nguyên tĩnh (CDN JS/CSS): Cache-First để tải nhanh và tiết kiệm dung lượng
     e.respondWith(
         caches.match(e.request).then((cachedResponse) => {
             if (cachedResponse) return cachedResponse;

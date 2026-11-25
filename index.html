@@ -3371,67 +3371,6 @@
         </div>
     </div>
 
-    <!-- PDF Modal -->
-    <div class="modal" id="pdfModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>📄 Nhập PDF</span>
-                <button class="close" onclick="closePDFModal()">✕</button>
-            </div>
-            <div id="pdfMessage" class="message"></div>
-            <div class="form-group">
-                <label>Thư mục</label>
-                <select id="pdfFolder"><option value="">Không</option></select>
-            </div>
-            <div class="form-group">
-                <label>Chất lượng nén</label>
-                <select id="pdfQuality">
-                    <option value="high">Cao</option>
-                    <option value="medium" selected>Trung bình</option>
-                    <option value="low">Thấp (nén nhiều)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Chọn file PDF</label>
-                <input type="file" id="pdfFile" accept=".pdf" onchange="handlePDFSelect(event)" />
-                <label for="pdfFile" class="btn btn-outline" style="display:inline-flex;width:100%;justify-content:center;margin-top:4px;cursor:pointer;padding:6px;border:1px dashed var(--border);border-radius:6px;font-size:12px;">📄 Chọn PDF</label>
-            </div>
-            <div id="pdfFileInfo" class="file-info hidden"></div>
-            <div id="pdfProgress" class="hidden">
-                <div style="font-size:12px;font-weight:500;">⏳ Đang nén...</div>
-                <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
-                <div class="progress-text" id="progressText">0%</div>
-            </div>
-            <div class="form-group">
-                <label>Số hiệu</label>
-                <input type="text" id="pdfCode" placeholder="VD: 36/2026/TT-BXD" />
-            </div>
-            <div class="form-group">
-                <label>Trích yếu</label>
-                <textarea id="pdfTitle" placeholder="Nhập trích yếu…"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Cơ quan</label>
-                <input type="text" id="pdfAuthor" placeholder="VD: Bộ Xây dựng" />
-            </div>
-            <div class="form-group">
-                <label>Trạng thái</label>
-                <select id="pdfStatus">
-                    <option value="active">Hiệu lực</option>
-                    <option value="expired">Hết hiệu lực</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Ghi chú</label>
-                <textarea id="pdfNotes" placeholder="Ghi chú…"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" id="pdfSaveBtn" onclick="savePDFDocument()">💾 Lưu</button>
-                <button class="btn btn-outline" onclick="closePDFModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Preview Modal -->
     <div class="modal fullscreen-viewer-modal" id="previewModal">
         <div class="modal-content wide">
@@ -3450,60 +3389,6 @@
                     </div>
                 </div>
                 <div id="previewError" style="color:var(--red);text-align:center;padding:14px;display:none;">❌ Không thể tải PDF</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- HTML Import Modal -->
-    <div class="modal" id="htmlModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>🌐 Nhập file HTML</span>
-                <button class="close" onclick="closeHTMLModal()">✕</button>
-            </div>
-            <div id="htmlMessage" class="message"></div>
-            <div class="form-group">
-                <label>Thư mục</label>
-                <select id="htmlFolder"><option value="">Không</option></select>
-            </div>
-            <div class="form-group">
-                <label>Chọn file HTML</label>
-                <input type="file" id="htmlFile" accept=".html,.htm,.xhtml,text/html" multiple style="display:none;" onchange="handleHTMLSelect(event)" />
-                <div class="dropzone" id="htmlDropzone" role="button" tabindex="0" onclick="document.getElementById('htmlFile').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('htmlFile').click();}">
-                    <strong>🌐 Chọn file hoặc kéo thả vào đây</strong>
-                    <span>Chọn được nhiều file .html cùng lúc • tối đa 50 MB mỗi file</span>
-                </div>
-            </div>
-            <div id="htmlFileList" class="html-file-list hidden"></div>
-            <div id="htmlMultiNote" class="file-info hidden">Nhiều file: mỗi file lấy <b>số hiệu</b> = tên file, <b>trích yếu</b> = thẻ &lt;title&gt; (nếu không có thì dùng tên file). Có thể sửa lại sau bằng nút ✏️.</div>
-            <div id="htmlSingleFields" class="hidden">
-                <div class="form-group">
-                    <label>Số hiệu / Tên</label>
-                    <input type="text" id="htmlCode" placeholder="VD: quan-ly-ho-so" />
-                </div>
-                <div class="form-group">
-                    <label>Trích yếu</label>
-                    <textarea id="htmlTitle" placeholder="Nhập trích yếu…"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Cơ quan / Nguồn</label>
-                <input type="text" id="htmlAuthor" placeholder="VD: Bộ Xây dựng" />
-            </div>
-            <div class="form-group">
-                <label>Trạng thái</label>
-                <select id="htmlStatus">
-                    <option value="active">Hiệu lực</option>
-                    <option value="expired">Hết hiệu lực</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Ghi chú</label>
-                <textarea id="htmlNotes" placeholder="Ghi chú…"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" id="htmlSaveBtn" onclick="saveHTMLDocuments()">💾 Lưu</button>
-                <button class="btn btn-outline" onclick="closeHTMLModal()">Đóng</button>
             </div>
         </div>
     </div>
@@ -4049,7 +3934,6 @@
             });
             document.getElementById('sortSelect').addEventListener('change', renderCards);
             document.getElementById('favoriteFilter').addEventListener('change', renderCards);
-            setupHtmlDropzone();
         }
 
         // ═══════════════════════════════════════════════
@@ -4549,7 +4433,7 @@
         }
 
         function populateFolderSelects() {
-            ['docFolder', 'pdfFolder', 'htmlFolder', 'moveFolderSelect'].forEach(id => {
+            ['docFolder', 'moveFolderSelect'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (!sel) return;
                 const val = sel.value;
@@ -5769,97 +5653,10 @@
         // ═══════════════════════════════════════════════
         //  PDF IMPORT (giữ nguyên, thêm folderId)
         // ═══════════════════════════════════════════════
-        function openPDFModal() {
-            currentPDFData = null;
-            document.getElementById('pdfMessage').className = 'message';
-            document.getElementById('pdfMessage').textContent = '';
-            document.getElementById('pdfFile').value = '';
-            document.getElementById('pdfFileInfo').classList.add('hidden');
-            document.getElementById('pdfProgress').classList.add('hidden');
-            document.getElementById('pdfCode').value = '';
-            document.getElementById('pdfTitle').value = '';
-            document.getElementById('pdfAuthor').value = '';
-            document.getElementById('pdfStatus').value = 'active';
-            document.getElementById('pdfNotes').value = '';
-            document.getElementById('pdfQuality').value = 'medium';
-            populateFolderSelects();
-            document.getElementById('pdfModal').classList.add('active');
-        }
-
-        function closePDFModal() { document.getElementById('pdfModal').classList.remove('active');
-            currentPDFData = null; }
-
-        function showPDFMessage(msg, type) { const el = document.getElementById('pdfMessage');
-            el.textContent = msg;
-            el.className = 'message ' + type; }
-
-        async function handlePDFSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            document.getElementById('pdfMessage').className = 'message';
-            if (file.size > 100 * 1024 * 1024) {
-                showPDFMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa 100 MB`, 'error');
-                document.getElementById('pdfFile').value = '';
-                return;
-            }
-            const name = file.name.replace('.pdf', '').trim();
-            document.getElementById('pdfCode').value = name;
-            const info = document.getElementById('pdfFileInfo');
-            info.innerHTML =
-                `<div class="name">📄 ${file.name}</div><div class="size">Kích thước gốc: ${formatFileSize(file.size)}</div><div style="margin-top:4px;color:var(--blue);font-size:12px;">⏳ Đang nén...</div>`;
-            info.classList.remove('hidden');
-            const prog = document.getElementById('pdfProgress');
-            prog.classList.remove('hidden');
-            document.getElementById('progressFill').style.width = '30%';
-            document.getElementById('progressText').textContent = 'Đang xử lý...';
-            try {
-                const quality = document.getElementById('pdfQuality').value;
-                const compressed = await compressPDF(file, quality);
-                currentPDFData = compressed;
-                const saved = (100 - parseFloat(compressed.ratio)).toFixed(1);
-                info.innerHTML =
-                    `<div class="name">📄 ${file.name}</div><div class="size">Kích thước gốc: ${formatFileSize(compressed.originalSize)}</div><div class="compressed">✅ Đã nén: ${formatFileSize(compressed.size)} (giảm ${saved}%) ${compressed.pageCount?`• ${compressed.pageCount} trang`:''}</div>`;
-                prog.classList.add('hidden');
-                showPDFMessage(`✓ Nén thành công! Kích thước mới: ${formatFileSize(compressed.size)}`, 'success');
-            } catch (e) { showPDFMessage('❌ Lỗi nén: ' + e.message, 'error');
-                prog.classList.add('hidden'); }
-        }
-
-        async function savePDFDocument() {
-            if (!currentPDFData) { showPDFMessage('Vui lòng chọn file PDF', 'error'); return; }
-            const code = document.getElementById('pdfCode').value.trim(),
-                title = document.getElementById('pdfTitle').value.trim();
-            if (!code || !title) { showPDFMessage('Vui lòng nhập số hiệu và trích yếu', 'error'); return; }
-            const doc = {
-                id: Date.now(),
-                type: 'pdf',
-                folderId: document.getElementById('pdfFolder').value || null,
-                code,
-                title,
-                author: document.getElementById('pdfAuthor').value.trim(),
-                issuedDate: new Date().toISOString().split('T')[0],
-                effectiveDate: '',
-                status: document.getElementById('pdfStatus').value,
-                notes: document.getElementById('pdfNotes').value.trim(),
-                pdfData: currentPDFData.data,
-                pdfFilename: currentPDFData.filename,
-                compressedRatio: (100 - parseFloat(currentPDFData.ratio)).toFixed(1),
-                favorite: false
-            };
-            try { await addDocument(doc);
-                await loadAllData();
-                showPDFMessage('✓ Lưu thành công!', 'success');
-                setTimeout(() => { closePDFModal();
-                    renderSidebar();
-                    renderCards(); }, 1000); } catch (e) { showPDFMessage('❌ Lỗi: ' + e.message, 'error'); }
-        }
-
         // ═══════════════════════════════════════════════
         //  LƯU TRỮ FILE HTML
         // ═══════════════════════════════════════════════
         const MAX_HTML_SIZE = 50 * 1024 * 1024;
-        let pendingHtmlFiles = [];
-        let htmlAutoFill = { code: '', title: '' };
         let currentHtmlPreviewId = null;
         let htmlPreviewUrl = null;
         const htmlTextCache = new Map();
@@ -5943,170 +5740,6 @@
                 <div class="pdf-hit-head" style="color:var(--teal,#0d9488);">🔎 Khớp trong nội dung HTML</div>
                 <div class="pdf-snip" onclick="openHtmlPreview(${d.id})">…${esc(before)}<mark>${esc(mid)}</mark>${esc(after)}…</div>
             </div>`;
-        }
-
-        function showHTMLMessage(msg, type) {
-            const el = document.getElementById('htmlMessage');
-            el.textContent = msg;
-            el.className = 'message ' + type;
-        }
-
-        function openHTMLModal() {
-            pendingHtmlFiles = [];
-            htmlAutoFill = { code: '', title: '' };
-            document.getElementById('htmlMessage').className = 'message';
-            document.getElementById('htmlMessage').textContent = '';
-            document.getElementById('htmlFile').value = '';
-            document.getElementById('htmlCode').value = '';
-            document.getElementById('htmlTitle').value = '';
-            document.getElementById('htmlAuthor').value = '';
-            document.getElementById('htmlStatus').value = 'active';
-            document.getElementById('htmlNotes').value = '';
-            populateFolderSelects();
-            document.getElementById('htmlFolder').value = selectedFolderId || '';
-            renderHTMLFileList();
-            document.getElementById('htmlModal').classList.add('active');
-        }
-
-        function closeHTMLModal() {
-            document.getElementById('htmlModal').classList.remove('active');
-            pendingHtmlFiles = [];
-        }
-
-        function handleHTMLSelect(event) {
-            processHTMLFiles(event.target.files).then(() => { event.target.value = ''; });
-        }
-
-        async function processHTMLFiles(fileList) {
-            const files = Array.from(fileList || []);
-            if (!files.length) return;
-            const skipped = [];
-            for (const file of files) {
-                if (!/\.(html?|xhtml)$/i.test(file.name)) { skipped.push(`${file.name} (không phải file .html)`); continue; }
-                if (file.size > MAX_HTML_SIZE) { skipped.push(`${file.name} (quá ${formatFileSize(MAX_HTML_SIZE)})`); continue; }
-                try {
-                    const html = decodeHtmlBuffer(await file.arrayBuffer());
-                    pendingHtmlFiles.push({
-                        filename: file.name,
-                        size: file.size,
-                        html,
-                        title: extractHtmlTitle(html),
-                        code: file.name.replace(/\.(html?|xhtml)$/i, '')
-                    });
-                } catch (e) { skipped.push(`${file.name} (${e.message})`); }
-            }
-            renderHTMLFileList();
-            if (skipped.length) showHTMLMessage('⚠️ Bỏ qua: ' + skipped.join('; '), 'warning');
-            else document.getElementById('htmlMessage').className = 'message';
-        }
-
-        function removePendingHtml(i) {
-            pendingHtmlFiles.splice(i, 1);
-            renderHTMLFileList();
-        }
-
-        function renderHTMLFileList() {
-            const list = document.getElementById('htmlFileList');
-            const n = pendingHtmlFiles.length;
-            list.innerHTML = pendingHtmlFiles.map((p, i) => `
-                <div class="html-file-item">
-                    <span>🌐</span>
-                    <div class="info">
-                        <div class="name">${esc(p.filename)}</div>
-                        <div class="sub">${formatFileSize(p.size)}${p.title ? ' • ' + esc(p.title) : ''}</div>
-                    </div>
-                    <button onclick="removePendingHtml(${i})" title="Bỏ file này">✕</button>
-                </div>`).join('');
-            list.classList.toggle('hidden', n === 0);
-            document.getElementById('htmlMultiNote').classList.toggle('hidden', n < 2);
-            document.getElementById('htmlSingleFields').classList.toggle('hidden', n !== 1);
-            document.getElementById('htmlSaveBtn').textContent = n > 1 ? `💾 Lưu ${n} file` : '💾 Lưu';
-
-            // Một file: tự điền số hiệu + trích yếu (không ghi đè nếu bạn đã tự sửa)
-            const codeEl = document.getElementById('htmlCode'),
-                titleEl = document.getElementById('htmlTitle');
-            if (n === 1) {
-                const p = pendingHtmlFiles[0];
-                const newTitle = p.title || p.code;
-                if (!codeEl.value || codeEl.value === htmlAutoFill.code) codeEl.value = p.code;
-                if (!titleEl.value || titleEl.value === htmlAutoFill.title) titleEl.value = newTitle;
-                htmlAutoFill = { code: p.code, title: newTitle };
-            } else {
-                if (codeEl.value === htmlAutoFill.code) codeEl.value = '';
-                if (titleEl.value === htmlAutoFill.title) titleEl.value = '';
-                htmlAutoFill = { code: '', title: '' };
-            }
-        }
-
-        function setupHtmlDropzone() {
-            const modal = document.getElementById('htmlModal');
-            const zone = document.getElementById('htmlDropzone');
-            ['dragenter', 'dragover'].forEach(ev => modal.addEventListener(ev, e => {
-                e.preventDefault();
-                zone.classList.add('dragover');
-            }));
-            modal.addEventListener('dragleave', e => {
-                if (e.target === modal || e.target === zone) zone.classList.remove('dragover');
-            });
-            modal.addEventListener('drop', e => {
-                e.preventDefault();
-                zone.classList.remove('dragover');
-                if (e.dataTransfer && e.dataTransfer.files) processHTMLFiles(e.dataTransfer.files);
-            });
-            // Thả trượt ra ngoài khi đang mở hộp nhập: không để trình duyệt mở file thay app
-            ['dragover', 'drop'].forEach(ev => window.addEventListener(ev, e => {
-                if (modal.classList.contains('active')) e.preventDefault();
-            }));
-        }
-
-        async function saveHTMLDocuments() {
-            const n = pendingHtmlFiles.length;
-            if (!n) { showHTMLMessage('Vui lòng chọn ít nhất một file HTML', 'error'); return; }
-            const single = n === 1;
-            const singleCode = document.getElementById('htmlCode').value.trim(),
-                singleTitle = document.getElementById('htmlTitle').value.trim();
-            if (single && (!singleCode || !singleTitle)) { showHTMLMessage('Vui lòng nhập số hiệu và trích yếu', 'error'); return; }
-            const folderId = document.getElementById('htmlFolder').value || null,
-                author = document.getElementById('htmlAuthor').value.trim(),
-                status = document.getElementById('htmlStatus').value,
-                notes = document.getElementById('htmlNotes').value.trim();
-            const today = new Date().toISOString().split('T')[0];
-            const stamp = Date.now();
-            const btn = document.getElementById('htmlSaveBtn');
-            btn.disabled = true;
-            let saved = 0;
-            try {
-                for (let i = 0; i < n; i++) {
-                    const p = pendingHtmlFiles[i];
-                    await addDocument({
-                        id: stamp + i,
-                        type: 'html',
-                        folderId,
-                        code: single ? singleCode : p.code,
-                        title: single ? singleTitle : (p.title || p.code),
-                        author,
-                        issuedDate: today,
-                        effectiveDate: '',
-                        status,
-                        notes,
-                        htmlData: p.html,
-                        htmlFilename: p.filename,
-                        htmlSize: new Blob([p.html]).size,
-                        favorite: false
-                    });
-                    saved++;
-                }
-                await loadAllData();
-                showHTMLMessage(`✓ Đã lưu ${saved} file HTML`, 'success');
-                setTimeout(() => { closeHTMLModal();
-                    renderSidebar();
-                    renderCards(); }, 700);
-            } catch (e) {
-                showHTMLMessage(`❌ Lỗi sau khi lưu ${saved}/${n} file: ` + e.message, 'error');
-                await loadAllData();
-                renderSidebar();
-                renderCards();
-            } finally { btn.disabled = false; }
         }
 
         // Xem trước trong iframe cách ly (sandbox, không có allow-same-origin)
