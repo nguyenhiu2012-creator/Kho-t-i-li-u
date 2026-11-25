@@ -279,6 +279,43 @@
             min-height: 0 !important;
         }
 
+    
+        /* ─── NHÃN HIỂN THỊ THƯ MỤC TRÊN MỖI THẺ TÀI LIỆU ─── */
+        .card-folder-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 4px 6px 4px 0;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+        .card-folder-tag.has-folder {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, 0.25);
+        }
+        [data-theme="dark"] .card-folder-tag.has-folder {
+            background: rgba(59, 130, 246, 0.18);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+        .card-folder-tag.no-folder {
+            background: var(--bg);
+            color: var(--text-light);
+        }
+        .card-folder-tag:active {
+            transform: scale(0.97);
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3082,48 +3119,7 @@
     </div>
 
     
-    <!-- ═══════════ ACTION SHEET: THÊM TÀI LIỆU MỚI (SMART ADD) ═══════════ -->
-    <div class="modal modal-sheet" id="smartAddModal" onclick="if(event.target===this)closeSmartAddModal()">
-        <div class="modal-content sheet-content">
-            <div class="sheet-handle"></div>
-            <div class="modal-header">
-                <span>＋ Thêm tài liệu mới</span>
-                <button class="close" onclick="closeSmartAddModal()">✕</button>
-            </div>
-            <div class="sheet-grid">
-                <div class="sheet-item" onclick="closeSmartAddModal(); openPDFModal()">
-                    <div class="sheet-icon bg-red">📄</div>
-                    <div class="sheet-info">
-                        <strong>Tài liệu PDF</strong>
-                        <span>Nén tự động 3 cấp độ & trích xuất văn bản tìm kiếm</span>
-                    </div>
-                    <div class="sheet-arrow">›</div>
-                </div>
-                <div class="sheet-item" onclick="closeSmartAddModal(); openHTMLModal()">
-                    <div class="sheet-icon bg-teal">🌐</div>
-                    <div class="sheet-info">
-                        <strong>Tệp tin HTML</strong>
-                        <span>Nhập nhiều file cùng lúc, xem trước cách ly</span>
-                    </div>
-                    <div class="sheet-arrow">›</div>
-                </div>
-                <div class="sheet-item" onclick="closeSmartAddModal(); openAddModal()">
-                    <div class="sheet-icon bg-green">📝</div>
-                    <div class="sheet-info">
-                        <strong>Văn bản Pháp luật</strong>
-                        <span>Thông tư, Quyết định, Nghị định, UBND (thủ công)</span>
-                    </div>
-                    <div class="sheet-arrow">›</div>
-                </div>
-                <div class="sheet-item" onclick="closeSmartAddModal(); openImportModal()">
-                    <div class="sheet-icon bg-blue">📥</div>
-                    <div class="sheet-info">
-                        <strong>Nhập từ file JSON</strong>
-                        <span>Nhập hàng loạt tài liệu từ dữ liệu có sẵn</span>
-                    </div>
-                    <div class="sheet-arrow">›</div>
-                </div>
-            </div>
+    
             <div class="sheet-footer">
                 <button type="button" class="btn btn-outline" style="width:100%;min-height:42px;" onclick="closeSmartAddModal()">Đóng</button>
             </div>
@@ -4039,8 +4035,17 @@
             );
             let _searchTimer = null;
             document.getElementById('searchInput').addEventListener('input', () => {
+                const val = document.getElementById('searchInput').value;
+                const clearBtn = document.getElementById('searchClearBtn');
+                if (clearBtn) clearBtn.style.display = val ? 'flex' : 'none';
+                const hdrBtn = document.getElementById('headerSearchToggle');
+                if (hdrBtn) {
+                    const bar = document.getElementById('iosSearchBar');
+                    hdrBtn.classList.toggle('active', Boolean(val.trim()) || (bar && bar.classList.contains('open')));
+                }
+                if (typeof updateClearFilterBtn === 'function') updateClearFilterBtn();
                 clearTimeout(_searchTimer);
-                _searchTimer = setTimeout(renderCards, 220);
+                _searchTimer = setTimeout(renderCards, 180);
             });
             document.getElementById('sortSelect').addEventListener('change', renderCards);
             document.getElementById('favoriteFilter').addEventListener('change', renderCards);
@@ -4768,14 +4773,19 @@
                 }
                 if (fav === 'favorite' && !d.favorite) return false;
                 if (search) {
-                    const c = (d.code || '').toLowerCase(),
-                        t = (d.title || '').toLowerCase(),
-                        n = (d.notes || '').toLowerCase(),
-                        a = (d.author || '').toLowerCase();
-                    return c.includes(search) || t.includes(search) || n.includes(search) || a.includes(search) ||
-                        (d.htmlFilename || '').toLowerCase().includes(search) ||
-                        (!!d.htmlData && getHtmlSearchText(d).includes(search)) ||
-                        (search.length >= 2 && !!d.pdfText && pdfTextHas(d, search));
+                    const fq = foldVietnamese(search);
+                    if (!fq) return true;
+                    const c = foldVietnamese(d.code),
+                        t = foldVietnamese(d.title),
+                        n = foldVietnamese(d.notes),
+                        a = foldVietnamese(d.author),
+                        pf = foldVietnamese(d.pdfFilename),
+                        hf = foldVietnamese(d.htmlFilename);
+                    const metaMatch = smartTextMatch(c + ' ' + t + ' ' + n + ' ' + a + ' ' + pf + ' ' + hf, fq);
+                    if (metaMatch) return true;
+                    if (d.htmlData && smartTextMatch(getHtmlSearchText(d), fq)) return true;
+                    if (fq.length >= 2 && d.pdfText && pdfTextHas(d, search)) return true;
+                    return false;
                 }
                 return true;
             });
@@ -4889,6 +4899,10 @@
                 const statusText = doc.status === 'active' ? '✅ Hiệu lực' : '❌ Hết hiệu lực';
                 const pdfBadge = hasPdf ? `<span class="badge-pdf-attach">📄 PDF</span>` : '';
                 const htmlBadge = hasHtml ? `<span class="badge-html-attach">🌐 HTML</span>` : '';
+                const folderPath = doc.folderId ? getFolderPath(doc.folderId) : '';
+                const folderLabel = folderPath || 'Chưa phân loại';
+                const folderClick = doc.folderId ? `selectFolder('${esc(doc.folderId)}')` : `selectFolder(null)`;
+                const folderBadge = `<button type="button" class="card-folder-tag ${folderPath ? 'has-folder' : 'no-folder'}" onclick="event.stopPropagation(); ${folderClick}" title="Xem thư mục này">📁 ${esc(folderLabel)}</button>`;
                 return `
                     <div class="card type-${esc(doc.type)}">
                         <button class="favorite-star ${isFav?'active':''}" onclick="toggleFavorite(${doc.id})" title="Yêu thích">${isFav?'⭐':'☆'}</button>
@@ -4896,8 +4910,8 @@
                         <div class="code clickable" onclick="${openCall}">${esc(doc.code)}</div>
                         <div class="title clickable" onclick="${openCall}">${esc(doc.title)}</div>
                         <div class="author">🏛️ ${esc(doc.author||'—')}</div>
-                        <span class="status-badge ${statusClass}">${statusText}</span>
-                        ${pdfHitHtml(doc, searchQ)}
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:4px 0;"><span class="status-badge ${statusClass}">${statusText}</span>${folderBadge}</div>
+                        ${pdfHitHtml(doc, searchQ)}${htmlHitHtml(doc, searchQ)}
                         ${noFile ? `<div class="no-file-note">⚠️ Chưa có file đính kèm nên chưa xem được nội dung. Bấm "📎 Đính kèm file" để gắn PDF hoặc HTML vào tài liệu này.</div>` : ''}
                         <div class="meta-row">
                             <div class="meta-item"><span class="m-label">Bản hành</span><span class="m-value">${formatDate(doc.issuedDate)}</span></div>
@@ -5106,9 +5120,23 @@
             return rec;
         }
 
+        function foldVietnamese(str) {
+            if (!str) return '';
+            return String(str).replace(/[đĐ]/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function smartTextMatch(haystackFolded, queryFolded) {
+            if (!haystackFolded || !queryFolded) return false;
+            if (haystackFolded.includes(queryFolded)) return true;
+            const words = queryFolded.split(/\s+/).filter(w => w.length >= 2);
+            if (words.length > 1) return words.every(w => haystackFolded.includes(w));
+            return false;
+        }
+
         function pdfTextHas(d, q) {
             const fq = pdfFoldQuery(q);
-            return fq.length >= 2 && pdfFoldFor(d).text.includes(fq);
+            if (fq.length < 2) return false;
+            return smartTextMatch(pdfFoldFor(d).text, fq);
         }
 
         function pdfPageOf(breaks, pos) {
@@ -5125,16 +5153,25 @@
             if (fq.length >= 2) {
                 const f = pdfFoldFor(d);
                 const pages = [];
-                let count = 0, first = -1, pos = f.text.indexOf(fq);
+                let term = fq;
+                let pos = f.text.indexOf(term);
+                if (pos === -1) {
+                    const words = fq.split(/\s+/).filter(w => w.length >= 2);
+                    for (const w of words) {
+                        const wp = f.text.indexOf(w);
+                        if (wp !== -1) { term = w; pos = wp; break; }
+                    }
+                }
+                let count = 0, first = -1;
                 while (pos !== -1 && count < 200) {
                     if (first < 0) first = pos;
                     count++;
                     const p = pdfPageOf(f.breaks, pos);
                     if (pages[pages.length - 1] !== p) pages.push(p);
-                    pos = f.text.indexOf(fq, pos + fq.length);
+                    pos = f.text.indexOf(term, pos + term.length);
                 }
                 if (count) {
-                    const os = f.map[first], oe = f.map[first + fq.length - 1] + 1;
+                    const os = f.map[first], oe = f.map[Math.min(first + term.length - 1, f.map.length - 1)] + 1;
                     const orig = d.pdfText;
                     const before = orig.slice(Math.max(0, os - 50), os).split('\f').pop();
                     const after = orig.slice(oe, oe + 80).split('\f')[0];
@@ -5201,13 +5238,15 @@
             el.hidden = !t;
         }
 
-        function pdfIndexKick() {
+        function pdfIndexKick(delay = 400) {
             clearTimeout(pdfIdxTimer);
-            pdfIdxTimer = setTimeout(pdfIndexRun, 1200);
+            pdfIdxTimer = setTimeout(pdfIndexRun, delay);
         }
 
         async function pdfIndexRun() {
-            if (pdfIdxRunning || typeof db === 'undefined' || !db) return;
+            if (pdfIdxRunning) return;
+            try { await ensureDB(); } catch (e) { return; }
+            if (!db) return;
             const pending = () => documents.filter(d => d.pdfData && d.pdfTextV !== PDF_TEXT_V && !pdfIdxFails.has(d.id));
             if (!pending().length) return;
             if (!ensurePdfJs()) {
@@ -5475,6 +5514,8 @@
                     doc.pdfData = currentAttachedFile.data;
                     doc.pdfFilename = currentAttachedFile.filename;
                     doc.compressedRatio = (100 - parseFloat(currentAttachedFile.ratio || 0)).toFixed(1);
+                    doc.pdfText = '';
+                    doc.pdfTextV = 0;
                 } else if (currentAttachedFile.type === 'html') {
                     doc.htmlData = currentAttachedFile.content;
                     doc.htmlFilename = currentAttachedFile.filename;
@@ -5872,9 +5913,36 @@
         function getHtmlSearchText(d) {
             const cached = htmlTextCache.get(d.id);
             if (cached && cached.len === d.htmlData.length) return cached.text;
-            const text = htmlToPlainText(d.htmlData).toLowerCase().slice(0, 300000);
-            htmlTextCache.set(d.id, { len: d.htmlData.length, text });
+            const raw = htmlToPlainText(d.htmlData).slice(0, 500000);
+            const text = foldVietnamese(raw);
+            htmlTextCache.set(d.id, { len: d.htmlData.length, text, raw });
             return text;
+        }
+
+        function htmlHitHtml(d, q) {
+            if (!q || q.length < 2 || !d.htmlData) return '';
+            const fq = foldVietnamese(q.trim());
+            if (!fq) return '';
+            getHtmlSearchText(d);
+            const cached = htmlTextCache.get(d.id);
+            if (!cached) return '';
+            let idx = cached.text.indexOf(fq);
+            let termLen = fq.length;
+            if (idx < 0) {
+                const words = fq.split(/\s+/).filter(w => w.length >= 2);
+                for (const w of words) {
+                    const wp = cached.text.indexOf(w);
+                    if (wp >= 0) { idx = wp; termLen = w.length; break; }
+                }
+            }
+            if (idx < 0) return '';
+            const raw = cached.raw || cached.text;
+            const b = Math.max(0, idx - 35), e = Math.min(raw.length, idx + termLen + 45);
+            const before = raw.slice(b, idx), mid = raw.slice(idx, idx + termLen), after = raw.slice(idx + termLen, e);
+            return `<div class="pdf-hit" style="border-color:rgba(13,148,136,0.3);background:var(--teal-bg,#f0fdfa);">
+                <div class="pdf-hit-head" style="color:var(--teal,#0d9488);">🔎 Khớp trong nội dung HTML</div>
+                <div class="pdf-snip" onclick="openHtmlPreview(${d.id})">…${esc(before)}<mark>${esc(mid)}</mark>${esc(after)}…</div>
+            </div>`;
         }
 
         function showHTMLMessage(msg, type) {
