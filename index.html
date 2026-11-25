@@ -124,6 +124,66 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+    
+        /* ─── FIX CHỌN FILE TRÊN IOS SAFARI / PWA ─── */
+        .unified-file-box { position: relative; margin-bottom: 12px; }
+        .sr-only-file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ─── SẮP XẾP LẠI VỊ TRÍ THƯ MỤC DƯỚI THANH TÌM KIẾM & TOOLBAR TRÊN MOBILE ─── */
+        @media (max-width: 768px) {
+            .app-layout {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .main-content {
+                display: contents !important;
+            }
+            .mindmap-panel {
+                order: 0;
+                width: 100%;
+            }
+            .ios-controls-container {
+                order: 1;
+                width: 100%;
+            }
+            .folder-sidebar,
+            .sidebar-toggle-btn {
+                order: 2;
+                width: 100%;
+            }
+            .cards-grid {
+                order: 3;
+                width: 100%;
+            }
+        }
+
+    
+        /* ─── THANH TÌM KIẾM THU GỌN VÀO ICON HÌNH TRÒN TRÊN HEADER ─── */
+        .ios-search-bar {
+            display: none !important;
+        }
+        .ios-search-bar.open {
+            display: flex !important;
+            animation: fadeIn 0.18s ease-out;
+        }
+        .ios-btn-icon.active {
+            background: var(--green-bg) !important;
+            border-color: var(--green) !important;
+            color: var(--green) !important;
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1434,10 +1494,17 @@
             background: var(--bg);
         }
         .mindmap-toolbar .back-btn {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
+            background: var(--green) !important;
+            border-color: var(--green) !important;
+            color: #fff !important;
             font-weight: 600;
+            box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
+        }
+        .mindmap-toolbar .back-btn:hover,
+        .mindmap-toolbar .back-btn:active {
+            background: #15803d !important;
+            border-color: #15803d !important;
+            color: #fff !important;
         }
         .mindmap-canvas {
             flex: 1;
@@ -1467,8 +1534,8 @@
             stroke-width: 1.5;
         }
         .mindmap-node.type-root rect {
-            fill: var(--primary);
-            stroke: var(--primary);
+            fill: var(--green);
+            stroke: var(--green);
         }
         .mindmap-node.type-root text {
             fill: #fff;
@@ -1503,7 +1570,7 @@
             font-size: 10px;
         }
         .mindmap-node:hover rect {
-            stroke: var(--primary);
+            stroke: var(--green);
         }
         .mindmap-link {
             fill: none;
@@ -2729,6 +2796,7 @@
             📋 Kho Tài Liệu <span class="logo-tag">Pro</span>
         </div>
         <div class="header-actions ios-header-actions">
+            <button type="button" class="ios-btn-icon" id="headerSearchToggle" onclick="toggleSearchBar()" title="Tìm kiếm tài liệu">🔍</button>
             <button type="button" class="ios-btn-icon" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
             <button type="button" class="ios-btn-primary" onclick="openAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
             <button type="button" class="ios-btn-icon" onclick="openToolsMenu()" title="Công cụ & Tiện ích">⋯</button>
@@ -2807,7 +2875,7 @@
 
             <div class="ios-controls-container">
                 <!-- Thanh tìm kiếm kiểu iOS -->
-                <div class="ios-search-bar">
+                <div class="ios-search-bar" id="iosSearchBar">
                     <span class="ios-search-icon">🔍</span>
                     <input type="text" id="searchInput" placeholder="Tìm kiếm tài liệu, số hiệu, nội dung..." autocomplete="off" />
                     <button type="button" class="ios-search-clear" id="searchClearBtn" onclick="clearSearchInput()" style="display:none;">✕</button>
@@ -2880,6 +2948,43 @@
     </div>
 
     <!-- ═══════════ MODALS ═══════════ -->
+
+    <!-- ═══════════ MODAL: HƯỚNG DẪN SỬ DỤNG ═══════════ -->
+    <div class="modal modal-sheet" id="guideModal" onclick="if(event.target===this)closeGuideModal()">
+        <div class="modal-content sheet-content">
+            <div class="sheet-handle"></div>
+            <div class="modal-header">
+                <span>📖 Hướng dẫn sử dụng</span>
+                <button class="close" onclick="closeGuideModal()">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.5;color:var(--text);">
+                <div style="padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+                    <strong>＋ Thêm tài liệu (PDF, HTML, Văn bản)</strong><br/>
+                    Chạm <b>＋ Thêm</b> ở góc trên để thêm mới. Bạn có thể chọn tệp <b>PDF</b> hoặc <b>HTML</b> trực tiếp trong biểu mẫu — hệ thống tự nhận diện, trích xuất tiêu đề và tối ưu dung lượng.
+                </div>
+                <div style="padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+                    <strong>🔍 Tìm kiếm & Lọc nhanh</strong><br/>
+                    Gõ từ khóa không cần dấu tiếng Việt để tìm theo số hiệu, trích yếu hoặc nội dung bên trong file PDF/HTML. Dùng 3 nút <b>Yêu thích</b>, <b>Mới nhất</b>, <b>Loại tệp</b> ngay dưới thanh tìm kiếm để lọc nhanh.
+                </div>
+                <div style="padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+                    <strong>📁 Quản lý Thư mục</strong><br/>
+                    Chạm icon <b>📁</b> trên thanh tiêu đề để ẩn/hiện danh sách thư mục. Hỗ trợ tạo thư mục lồng nhau nhiều cấp.
+                </div>
+                <div style="padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+                    <strong>💾 Sao lưu & Phục hồi an toàn</strong><br/>
+                    Mọi dữ liệu được lưu trực tiếp trong bộ nhớ iPhone (hoạt động cả khi Offline). Hãy định kỳ vào menu <b>⋯ ➔ Sao lưu toàn bộ dữ liệu</b> để tải tệp <code>.json</code> cất vào iCloud/Tệp phòng trường hợp đổi máy.
+                </div>
+                <div style="padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+                    <strong>🗑️ Thùng rác</strong><br/>
+                    Tài liệu đã xóa được giữ tạm trong Thùng rác 30 ngày để bạn có thể khôi phục lại bất cứ lúc nào.
+                </div>
+            </div>
+            <div class="sheet-footer">
+                <button type="button" class="btn btn-primary" style="width:100%;min-height:42px;" onclick="closeGuideModal()">Đã hiểu</button>
+            </div>
+        </div>
+    </div>
+
     
     <!-- ═══════════ ACTION SHEET: THÊM TÀI LIỆU MỚI (SMART ADD) ═══════════ -->
     <div class="modal modal-sheet" id="smartAddModal" onclick="if(event.target===this)closeSmartAddModal()">
@@ -3050,14 +3155,14 @@
             <!-- ─── KHU VỰC ĐÍNH KÈM TỆP HỢP NHẤT (PDF hoặc HTML) ─── -->
             <div class="form-group unified-file-box">
                 <label>Đính kèm tệp <span style="font-weight:normal;color:var(--text-light);font-size:12px;">(PDF hoặc HTML - tự nhận diện)</span></label>
-                <input type="file" id="unifiedFileInput" accept=".pdf,.html,.htm,.xhtml" onchange="handleUnifiedFileSelect(event)" style="display:none;" />
-                <div id="unifiedDropZone" class="unified-dropzone" onclick="document.getElementById('unifiedFileInput').click()">
+                <input type="file" id="unifiedFileInput" accept=".pdf,.html,.htm,application/pdf,text/html" onchange="handleUnifiedFileSelect(event)" class="sr-only-file-input" />
+                <label for="unifiedFileInput" id="unifiedDropZone" class="unified-dropzone">
                     <div class="drop-icon">📎</div>
                     <div class="drop-text">
                         <strong>Chạm để đính kèm tệp PDF hoặc HTML</strong>
                         <span>Tự động trích xuất tiêu đề, số hiệu & tối ưu tệp</span>
                     </div>
-                </div>
+                </label>
                 <div id="unifiedAttachedFileInfo" class="unified-file-attached" style="display:none;">
                     <span class="file-icon" id="attachedFileIcon">📄</span>
                     <div class="file-details">
@@ -5049,13 +5154,17 @@
         //  CRUD (giữ nguyên từ bản cũ, chỉ bổ sung folderId)
         // ═══════════════════════════════════════════════
         let currentAttachedFile = null;
+        let attachedFileRemoved = false;
 
         async function handleUnifiedFileSelect(event) {
-            const file = event.target.files[0];
+            const file = event.target.files && event.target.files[0];
             if (!file) return;
-            const ext = file.name.split('.').pop().toLowerCase();
+            attachedFileRemoved = false;
+            const ext = (file.name.split('.').pop() || '').toLowerCase();
+            const isPdf = ext === 'pdf' || file.type === 'application/pdf';
+            const isHtml = ext === 'html' || ext === 'htm' || ext === 'xhtml' || file.type === 'text/html';
 
-            if (ext === 'pdf') {
+            if (isPdf) {
                 if (file.size > 100 * 1024 * 1024) {
                     showAddMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa 100 MB`, 'error');
                     event.target.value = '';
@@ -5085,13 +5194,13 @@
                         ratio: compressed.ratio
                     };
                     const savedRatio = (100 - parseFloat(compressed.ratio)).toFixed(0);
-                    showAttachedFileInfo('📄', file.name, `PDF ${formatFileSize(compressed.compressedSize || file.size)} (- ${savedRatio}%)`);
+                    showAttachedFileInfo('📄', file.name, `PDF ${formatFileSize(compressed.size || file.size)} (- ${savedRatio}%)`);
                 } catch (e) {
                     showAddMessage('❌ Lỗi xử lý PDF: ' + e.message, 'error');
                 } finally {
                     if (prog) prog.classList.add('hidden');
                 }
-            } else if (ext === 'html' || ext === 'htm' || ext === 'xhtml') {
+            } else if (isHtml) {
                 if (file.size > MAX_HTML_SIZE) {
                     showAddMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa ${formatFileSize(MAX_HTML_SIZE)}`, 'error');
                     event.target.value = '';
@@ -5135,8 +5244,9 @@
             document.getElementById('attachedFileSize').textContent = sizeStr;
         }
 
-        function removeAttachedFile() {
+        function removeAttachedFile(markRemoved = true) {
             currentAttachedFile = null;
+            if (markRemoved) attachedFileRemoved = true;
             const info = document.getElementById('unifiedAttachedFileInfo');
             if (info) info.style.display = 'none';
             const dz = document.getElementById('unifiedDropZone');
@@ -5147,11 +5257,12 @@
 
         function openAddModal() {
             currentEditId = null;
+            attachedFileRemoved = false;
             document.getElementById('modalTitle').textContent = 'Thêm tài liệu';
             document.getElementById('addMessage').className = 'message';
             document.getElementById('addMessage').textContent = '';
             clearForm();
-            removeAttachedFile();
+            removeAttachedFile(false);
             populateFolderSelects();
             document.getElementById('addModal').classList.add('active');
         }
@@ -5168,7 +5279,7 @@
             document.getElementById('docEffectiveDate').value = '';
             document.getElementById('docStatus').value = 'active';
             document.getElementById('docNotes').value = '';
-            removeAttachedFile();
+            removeAttachedFile(false);
         }
 
         async function saveDocument() {
@@ -5197,8 +5308,9 @@
                     doc.pdfFilename = currentAttachedFile.filename;
                     doc.compressedRatio = (100 - parseFloat(currentAttachedFile.ratio || 0)).toFixed(1);
                 } else if (currentAttachedFile.type === 'html') {
-                    doc.htmlContent = currentAttachedFile.content;
+                    doc.htmlData = currentAttachedFile.content;
                     doc.htmlFilename = currentAttachedFile.filename;
+                    doc.htmlSize = currentAttachedFile.size || (currentAttachedFile.content ? currentAttachedFile.content.length : 0);
                 }
             }
 
@@ -5208,6 +5320,14 @@
                     if (existing) {
                         Object.keys(existing).forEach(k => { if (!(k in doc)) doc[k] = existing[k]; });
                         doc.favorite = existing.favorite || false;
+                        if (attachedFileRemoved && !currentAttachedFile) {
+                            delete doc.pdfData;
+                            delete doc.pdfFilename;
+                            delete doc.compressedRatio;
+                            delete doc.htmlData;
+                            delete doc.htmlFilename;
+                            delete doc.htmlSize;
+                        }
                     }
                     await updateDocument(doc);
                 } else await addDocument(doc);
@@ -5242,6 +5362,7 @@
             document.getElementById('docNotes').value = doc.notes || '';
 
             if (doc.type === 'pdf' && doc.pdfData) {
+                attachedFileRemoved = false;
                 currentAttachedFile = {
                     type: 'pdf',
                     data: doc.pdfData,
@@ -5249,15 +5370,18 @@
                     ratio: doc.compressedRatio || '0'
                 };
                 showAttachedFileInfo('📄', doc.pdfFilename || 'tailieu.pdf', 'Tệp PDF đính kèm');
-            } else if (doc.type === 'html' && doc.htmlContent) {
+            } else if (doc.type === 'html' && (doc.htmlData || doc.htmlContent)) {
+                attachedFileRemoved = false;
                 currentAttachedFile = {
                     type: 'html',
-                    content: doc.htmlContent,
-                    filename: doc.htmlFilename || 'trang.html'
+                    content: doc.htmlData || doc.htmlContent,
+                    filename: doc.htmlFilename || 'trang.html',
+                    size: doc.htmlSize || 0
                 };
                 showAttachedFileInfo('🌐', doc.htmlFilename || 'trang.html', 'Tệp HTML đính kèm');
             } else {
-                removeAttachedFile();
+                attachedFileRemoved = false;
+                removeAttachedFile(false);
             }
             document.getElementById('addModal').classList.add('active');
         }
@@ -6292,10 +6416,14 @@
 
         function clearSearchInput() {
             const input = document.getElementById('searchInput');
+            const bar = document.getElementById('iosSearchBar');
+            const toggleBtn = document.getElementById('headerSearchToggle');
             if (input) {
                 input.value = '';
                 const btn = document.getElementById('searchClearBtn');
                 if (btn) btn.style.display = 'none';
+                if (bar) bar.classList.remove('open');
+                if (toggleBtn) toggleBtn.classList.remove('active');
                 updateClearFilterBtn();
                 renderCards();
             }
@@ -6357,6 +6485,35 @@
 
             const hasActiveFilter = (searchVal !== '') || (typeVal !== '') || (sortVal !== 'date-desc') || (favVal !== '') || (statusVal !== '');
             clearBtn.style.display = hasActiveFilter ? 'inline-flex' : 'none';
+        }
+
+        
+        function showGuideModal() {
+            const modal = document.getElementById('guideModal');
+            if (modal) modal.classList.add('active');
+        }
+        function closeGuideModal() {
+            const modal = document.getElementById('guideModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        
+        function toggleSearchBar() {
+            const bar = document.getElementById('iosSearchBar');
+            const btn = document.getElementById('headerSearchToggle');
+            const input = document.getElementById('searchInput');
+            if (!bar) return;
+            const willOpen = !bar.classList.contains('open');
+            if (willOpen) {
+                bar.classList.add('open');
+                if (btn) btn.classList.add('active');
+                if (input) setTimeout(() => input.focus(), 50);
+            } else {
+                bar.classList.remove('open');
+                if (btn && (!input || !input.value.trim())) {
+                    btn.classList.remove('active');
+                }
+            }
         }
 
         // ─── START ───
