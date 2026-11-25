@@ -225,6 +225,60 @@
             }
         }
 
+    
+        /* ─── XEM FILE FULL MÀN HÌNH TRÊN IPHONE ─── */
+        .modal.fullscreen-viewer-modal {
+            padding: 0 !important;
+            align-items: stretch !important;
+            justify-content: stretch !important;
+        }
+        .modal.fullscreen-viewer-modal .modal-content {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            height: 100dvh !important;
+            max-height: 100dvh !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            padding: calc(var(--sat) + 8px) calc(var(--sar) + 8px) calc(var(--sab) + 8px) calc(var(--sal) + 8px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            box-sizing: border-box !important;
+        }
+        .modal.fullscreen-viewer-modal .modal-header {
+            flex-shrink: 0;
+            margin-bottom: 8px !important;
+            padding: 2px 4px;
+        }
+        .modal.fullscreen-viewer-modal #previewContent {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal.fullscreen-viewer-modal .pdf-viewer-container {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal.fullscreen-viewer-modal #pdfCanvas {
+            max-width: 100%;
+            height: auto !important;
+            margin: 0 auto;
+        }
+        .modal.fullscreen-viewer-modal .pdf-controls {
+            flex-shrink: 0;
+            margin-top: auto;
+            padding-top: 8px;
+        }
+        .modal.fullscreen-viewer-modal .html-frame-holder {
+            flex: 1 !important;
+            height: auto !important;
+            min-height: 0 !important;
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3383,7 +3437,7 @@
     </div>
 
     <!-- Preview Modal -->
-    <div class="modal" id="previewModal">
+    <div class="modal fullscreen-viewer-modal" id="previewModal">
         <div class="modal-content wide">
             <div class="modal-header">
                 <span id="previewTitle">📄 Xem trước PDF</span>
@@ -3459,7 +3513,7 @@
     </div>
 
     <!-- HTML Preview Modal -->
-    <div class="modal" id="htmlPreviewModal">
+    <div class="modal fullscreen-viewer-modal" id="htmlPreviewModal">
         <div class="modal-content wide html-viewer" id="htmlPreviewBox">
             <div class="modal-header">
                 <span id="htmlPreviewTitle">🌐 Xem trước HTML</span>
@@ -4008,14 +4062,14 @@
             const newTheme = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
             lsSet('theme', newTheme);
-            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            const _tt = document.querySelector('.theme-toggle'); if (_tt) _tt.textContent = newTheme === 'dark' ? '☀️' : '🌙';
             if (document.getElementById('statsModal').classList.contains('active')) setTimeout(renderCharts, 300);
         }
 
         function applyTheme() {
             const saved = lsGet('theme');
             if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
-            document.querySelector('.theme-toggle').textContent = effectiveTheme() === 'dark' ? '☀️' : '🌙';
+            const _tt = document.querySelector('.theme-toggle'); if (_tt) _tt.textContent = effectiveTheme() === 'dark' ? '☀️' : '🌙';
         }
 
         // ═══════════════════════════════════════════════
