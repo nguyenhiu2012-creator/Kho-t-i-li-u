@@ -4798,15 +4798,20 @@
                 updateIosStatsDisplay(filtered.length, total, active, pdfs, htmlsCount, favs);
             }
 
-            const field = document.getElementById('fieldFilter').value;
+            const fieldEl = document.getElementById('fieldFilter');
+            const field = fieldEl ? fieldEl.value : '';
             const badge = document.getElementById('activeFilterBadge');
             const badgeText = document.getElementById('filterBadgeText');
-            if (field) {
-                badge.style.display = 'inline-flex';
-                const labels = { xaydung: 'Lĩnh vực Xây dựng', quyhoach: 'Lĩnh vực Quy hoạch',
-                    kinhtexaydung: 'Lĩnh vực Kinh tế xây dựng' };
-                badgeText.textContent = labels[field] || field;
-            } else badge.style.display = 'none';
+            if (badge && badgeText) {
+                if (field) {
+                    badge.style.display = 'inline-flex';
+                    const labels = { xaydung: 'Lĩnh vực Xây dựng', quyhoach: 'Lĩnh vực Quy hoạch',
+                        kinhtexaydung: 'Lĩnh vực Kinh tế xây dựng' };
+                    badgeText.textContent = labels[field] || field;
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
 
             if (filtered.length === 0) {
                 grid.innerHTML =
@@ -5369,6 +5374,10 @@
             clearForm();
             removeAttachedFile(false);
             populateFolderSelects();
+            if (selectedFolderId) {
+                const df = document.getElementById('docFolder');
+                if (df) df.value = selectedFolderId;
+            }
             document.getElementById('addModal').classList.add('active');
         }
 
@@ -6436,10 +6445,14 @@
         }
         function ftToggle() {
             const fb = document.getElementById('filterBar'), b = document.getElementById('filterToggle');
+            if (!fb) {
+                if (typeof toggleQuickToolbar === 'function') toggleQuickToolbar();
+                return;
+            }
             const open = fb.classList.toggle('ft-open');
-            b.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
         }
-        document.getElementById('filterBar').addEventListener('change', ftUpdate);
+        const _fbEl = document.getElementById('filterBar'); if (_fbEl) _fbEl.addEventListener('change', ftUpdate);
         (function () {
             const orig = window.clearFilters;
             window.clearFilters = function () { const r = orig.apply(this, arguments); ftUpdate(); return r; };
