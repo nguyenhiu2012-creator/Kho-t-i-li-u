@@ -184,6 +184,47 @@
             color: var(--green) !important;
         }
 
+    
+        /* ─── THU GỌN THANH YÊU THÍCH / MỚI NHẤT / LOẠI TỆP VÀO NÚT 🎛️ ─── */
+        .ios-toolbar-grid {
+            display: none !important;
+        }
+        .ios-toolbar-grid.open {
+            display: grid !important;
+            animation: fadeIn 0.18s ease-out;
+        }
+        @media (max-width: 768px) {
+            .ios-header {
+                padding: 6px 10px !important;
+                gap: 6px;
+            }
+            .ios-header .logo {
+                font-size: 14px !important;
+                white-space: nowrap;
+            }
+            .ios-header-actions {
+                gap: 5px !important;
+                flex-shrink: 0;
+            }
+            .ios-btn-icon {
+                width: 34px !important;
+                height: 34px !important;
+                min-height: 34px !important;
+                font-size: 15px !important;
+            }
+            .ios-btn-primary {
+                padding: 5px 10px !important;
+                font-size: 12px !important;
+                min-height: 34px !important;
+                white-space: nowrap;
+            }
+        }
+        @media (max-width: 400px) {
+            .logo-tag {
+                display: none !important;
+            }
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -2800,6 +2841,7 @@
             <button type="button" class="ios-btn-icon" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
             <button type="button" class="ios-btn-primary" onclick="openAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
             <button type="button" class="ios-btn-icon" onclick="openToolsMenu()" title="Công cụ & Tiện ích">⋯</button>
+            <button type="button" class="ios-btn-icon" id="headerFilterToggle" onclick="toggleQuickToolbar()" title="Yêu thích, Sắp xếp & Loại tệp">🎛️</button>
         </div>
     </header>
 
@@ -2887,7 +2929,7 @@
                 <div class="idx-status" id="idxStatus" role="status" aria-live="polite" hidden></div>
 
                 <!-- Thanh điều khiển cố định 3 nút chuẩn dọc iPhone Pro Max (Không cuộn ngang) -->
-                <div class="ios-toolbar-grid">
+                <div class="ios-toolbar-grid" id="iosToolbarGrid">
                     <button type="button" class="toolbar-item toolbar-btn" id="chipFavorite" onclick="toggleFavoriteChip()">
                         ⭐ Yêu thích
                     </button>
@@ -3625,8 +3667,15 @@
             return new Promise((resolve, reject) => {
                 const req = indexedDB.open(DB_NAME, DB_VERSION);
                 req.onerror = () => reject(req.error);
-                req.onsuccess = () => { db = req.result;
-                    resolve(db); };
+                req.onblocked = () => reject(new Error('Cơ sở dữ liệu đang bận, vui lòng thử lại.'));
+                req.onsuccess = () => {
+                    db = req.result;
+                    if (db) {
+                        db.onclose = () => { db = null; };
+                        db.onversionchange = () => { if (db) db.close(); db = null; };
+                    }
+                    resolve(db);
+                };
                 req.onupgradeneeded = (e) => {
                     const d = e.target.result;
                     if (!d.objectStoreNames.contains(STORE_DOCS)) {
@@ -3656,30 +3705,65 @@
             });
         }
 
-        function addFolder(f) { return new Promise((r, rej) => { const tx = db.transaction(STORE_FOLDERS, 'readwrite');
+        let dbPromise = null;
+        async function ensureDB() {
+            if (db) return db;
+            if (!dbPromise) {
+                dbPromise = initDB().finally(() => { dbPromise = null; });
+            }
+            return await dbPromise;
+        }
+
+        async function getDBTransaction(storeName, mode = 'readonly') {
+            let activeDb = await ensureDB();
+            try {
+                return activeDb.transaction(storeName, mode);
+            } catch (err) {
+                db = null;
+                activeDb = await ensureDB();
+                return activeDb.transaction(storeName, mode);
+            }
+        }
+
+        async function addFolder(f) {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_FOLDERS).add(f);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function updateFolder(f) { return new Promise((r, rej) => { const tx = db.transaction(STORE_FOLDERS, 'readwrite');
+        async function updateFolder(f) {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_FOLDERS).put(f);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function getAllFolders() { return new Promise((r, rej) => { const tx = db.transaction(STORE_FOLDERS, 'readonly'); const req =
-                    tx.objectStore(STORE_FOLDERS).getAll();
+        async function getAllFolders() {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readonly');
+            return new Promise((r, rej) => {
+                const req = tx.objectStore(STORE_FOLDERS).getAll();
                 req.onsuccess = () => r(req.result);
-                req.onerror = () => rej(req.error); }); }
+                req.onerror = () => rej(req.error);
+            });
+        }
 
-        function deleteFolderById(id) { return new Promise((r, rej) => { const tx = db.transaction(STORE_FOLDERS,
-                'readwrite');
+        async function deleteFolderById(id) {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_FOLDERS).delete(id);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function getFoldersByParent(parentId) {
+        async function getFoldersByParent(parentId) {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readonly');
             return new Promise((r, rej) => {
-                const tx = db.transaction(STORE_FOLDERS, 'readonly');
                 const index = tx.objectStore(STORE_FOLDERS).index('parentId');
                 const req = index.getAll(parentId || null);
                 req.onsuccess = () => r(req.result);
@@ -3687,38 +3771,59 @@
             });
         }
 
-        function addDocument(d) { return new Promise((r, rej) => { const tx = db.transaction(STORE_DOCS, 'readwrite');
+        async function addDocument(d) {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_DOCS).add(d);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function updateDocument(d) { return new Promise((r, rej) => { const tx = db.transaction(STORE_DOCS, 'readwrite');
+        async function updateDocument(d) {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_DOCS).put(d);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function getAllDocuments() { return new Promise((r, rej) => { const tx = db.transaction(STORE_DOCS, 'readonly'); const req =
-                    tx.objectStore(STORE_DOCS).getAll();
+        async function getAllDocuments() {
+            const tx = await getDBTransaction(STORE_DOCS, 'readonly');
+            return new Promise((r, rej) => {
+                const req = tx.objectStore(STORE_DOCS).getAll();
                 req.onsuccess = () => r(req.result);
-                req.onerror = () => rej(req.error); }); }
+                req.onerror = () => rej(req.error);
+            });
+        }
 
-        function deleteDocumentById(id) { return new Promise((r, rej) => { const tx = db.transaction(STORE_DOCS,
-                'readwrite');
+        async function deleteDocumentById(id) {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_DOCS).delete(id);
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function clearAllDocuments() { return new Promise((r, rej) => { const tx = db.transaction(STORE_DOCS,
-                'readwrite');
+        async function clearAllDocuments() {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_DOCS).clear();
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
-        function clearAllFolders() { return new Promise((r, rej) => { const tx = db.transaction(STORE_FOLDERS,
-                'readwrite');
+        async function clearAllFolders() {
+            const tx = await getDBTransaction(STORE_FOLDERS, 'readwrite');
+            return new Promise((r, rej) => {
                 tx.objectStore(STORE_FOLDERS).clear();
                 tx.oncomplete = () => r();
-                tx.onerror = () => rej(tx.error); }); }
+                tx.onerror = () => rej(tx.error);
+            });
+        }
 
 
         // ═══════════════════════════════════════════════
@@ -4770,18 +4875,18 @@
         }
 
         // Xóa/ghi thẳng vào kho, không tính là "thay đổi chưa sao lưu"
-        function rawDeleteDoc(id) {
+        async function rawDeleteDoc(id) {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
             return new Promise((r, rej) => {
-                const tx = db.transaction(STORE_DOCS, 'readwrite');
                 tx.objectStore(STORE_DOCS).delete(id);
                 tx.oncomplete = () => r();
                 tx.onerror = () => rej(tx.error);
             });
         }
 
-        function rawMergeDoc(id, patch) {
+        async function rawMergeDoc(id, patch) {
+            const tx = await getDBTransaction(STORE_DOCS, 'readwrite');
             return new Promise((r, rej) => {
-                const tx = db.transaction(STORE_DOCS, 'readwrite');
                 const st = tx.objectStore(STORE_DOCS);
                 const g = st.get(id);
                 g.onsuccess = () => { const cur = g.result; if (cur) { Object.assign(cur, patch); st.put(cur); } };
@@ -6485,6 +6590,7 @@
 
             const hasActiveFilter = (searchVal !== '') || (typeVal !== '') || (sortVal !== 'date-desc') || (favVal !== '') || (statusVal !== '');
             clearBtn.style.display = hasActiveFilter ? 'inline-flex' : 'none';
+            if (typeof updateHeaderFilterToggleState === 'function') updateHeaderFilterToggleState();
         }
 
         
@@ -6514,6 +6620,33 @@
                     btn.classList.remove('active');
                 }
             }
+        }
+
+        
+        function toggleQuickToolbar() {
+            const grid = document.getElementById('iosToolbarGrid');
+            const btn = document.getElementById('headerFilterToggle');
+            if (!grid) return;
+            const willOpen = !grid.classList.contains('open');
+            if (willOpen) {
+                grid.classList.add('open');
+                if (btn) btn.classList.add('active');
+            } else {
+                grid.classList.remove('open');
+                updateHeaderFilterToggleState();
+            }
+        }
+
+        function updateHeaderFilterToggleState() {
+            const btn = document.getElementById('headerFilterToggle');
+            const grid = document.getElementById('iosToolbarGrid');
+            if (!btn) return;
+            const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : '';
+            const sortVal = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'date-desc';
+            const favVal = document.getElementById('favoriteFilter') ? document.getElementById('favoriteFilter').value : '';
+            const hasToolbarFilter = (typeVal !== '') || (sortVal !== 'date-desc') || (favVal !== '');
+            const isOpen = grid && grid.classList.contains('open');
+            btn.classList.toggle('active', isOpen || hasToolbarFilter);
         }
 
         // ─── START ───
