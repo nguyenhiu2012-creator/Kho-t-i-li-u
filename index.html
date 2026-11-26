@@ -460,6 +460,145 @@
             padding: 0 8px;
         }
 
+    
+        /* ─── THẺ TÀI LIỆU SIÊU GỌN CHUẨN IPHONE ─── */
+        .cards-grid {
+            gap: 8px !important;
+        }
+        .card.compact-card {
+            padding: 10px 12px !important;
+            border-radius: 10px !important;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .compact-card-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+        .compact-card-top .badge {
+            flex-shrink: 0;
+            margin: 0 !important;
+            padding: 2px 7px !important;
+            font-size: 10px !important;
+        }
+        .compact-card-top .card-folder-tag {
+            margin: 0 !important;
+            padding: 2px 7px !important;
+            font-size: 10px !important;
+            min-width: 0;
+        }
+        .compact-card-top .favorite-star {
+            position: static !important;
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: 17px !important;
+            padding: 0 2px !important;
+            line-height: 1;
+        }
+        .compact-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .compact-card-sub {
+            font-size: 11px;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .card.compact-card .card-actions {
+            display: flex !important;
+            align-items: center;
+            gap: 5px !important;
+            margin-top: 2px !important;
+            padding-top: 6px !important;
+            border-top: 1px dashed var(--border);
+            flex-wrap: nowrap !important;
+        }
+        .card.compact-card .card-actions button {
+            min-height: 30px !important;
+            padding: 3px 8px !important;
+            font-size: 11px !important;
+            border-radius: 6px !important;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+        .card.compact-card .card-actions .btn-preview,
+        .card.compact-card .card-actions .btn-attach {
+            flex: 1 1 auto !important;
+            justify-content: center;
+        }
+
+    
+        /* ─── ĐỊNH DẠNG FILE MỞ RỘNG & TRÌNH XEM ĐA NĂNG ─── */
+        .badge-word { background: #dbeafe; color: #1d4ed8; }
+        .badge-excel { background: #dcfce7; color: #15803d; }
+        .badge-image { background: #f3e8ff; color: #7e22ce; }
+        .badge-text { background: #f1f5f9; color: #334155; }
+        .badge-file { background: #fef3c7; color: #b45309; }
+        [data-theme="dark"] .badge-word { background: rgba(37, 99, 235, 0.22); color: #93c5fd; }
+        [data-theme="dark"] .badge-excel { background: rgba(22, 163, 74, 0.22); color: #86efac; }
+        [data-theme="dark"] .badge-image { background: rgba(147, 51, 234, 0.22); color: #d8b4fe; }
+        [data-theme="dark"] .badge-text { background: rgba(148, 163, 184, 0.22); color: #cbd5e1; }
+        [data-theme="dark"] .badge-file { background: rgba(217, 119, 6, 0.22); color: #fcd34d; }
+
+        .file-preview-body {
+            flex: 1;
+            min-height: 0;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        .file-preview-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+        .file-preview-text {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--text);
+            align-self: flex-start;
+        }
+        .file-preview-office {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            max-width: 340px;
+            padding: 20px;
+        }
+        .file-preview-office .big-icon { font-size: 56px; line-height: 1; }
+        .file-preview-office .file-title { font-size: 15px; font-weight: 700; color: var(--text); word-break: break-word; }
+        .file-preview-office .file-meta { font-size: 12px; color: var(--text-light); }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3180,12 +3319,17 @@
                     <div class="toolbar-item toolbar-select-box">
                         <select id="typeFilter" onchange="renderCards(); updateClearFilterBtn();">
                             <option value="">📂 Loại tệp: Tất cả</option>
+                            <option value="pdf">📄 PDF</option>
+                            <option value="word">📘 Word</option>
+                            <option value="excel">📗 Excel / CSV</option>
+                            <option value="image">🖼️ Hình ảnh</option>
+                            <option value="html">🌐 HTML</option>
+                            <option value="text">📝 Văn bản (TXT)</option>
+                            <option value="file">📎 Tệp khác</option>
                             <option value="thongtu">📘 Thông tư</option>
                             <option value="quyetdinh">📗 Quyết định</option>
                             <option value="nghidinh">📙 Nghị định</option>
                             <option value="ubnd">🏛️ UBND</option>
-                            <option value="pdf">📄 PDF</option>
-                            <option value="html">🌐 HTML</option>
                         </select>
                     </div>
                 </div>
@@ -3308,6 +3452,24 @@
 
             <div class="sheet-section-title">DỮ LIỆU & SAO LƯU</div>
             <div class="sheet-grid">
+                <div id="toolsStorageCard" style="padding:10px 12px;margin-bottom:6px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:12px;display:flex;flex-direction:column;gap:5px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <strong style="color:var(--text);">📱 Bộ nhớ lưu trữ trên iPhone</strong>
+                        <span id="toolsStorageUsed" style="font-weight:700;color:var(--green);">Đang kiểm tra…</span>
+                    </div>
+                    <div style="height:6px;background:var(--border);border-radius:4px;overflow:hidden;">
+                        <div id="toolsStorageBar" style="height:100%;width:0%;background:var(--green);transition:width 0.3s ease;"></div>
+                    </div>
+                    <div id="toolsStorageDetail" style="font-size:11px;color:var(--text-light);">Đang tính toán dung lượng tài liệu…</div>
+                </div>
+                <div class="sheet-item" onclick="closeToolsMenu(); shareBackupData()">
+                    <div class="sheet-icon bg-blue">📤</div>
+                    <div class="sheet-info">
+                        <strong>Chia sẻ bản sao lưu (AirDrop / Zalo / iCloud)</strong>
+                        <span>Gửi nhanh file backup.json qua bảng chia sẻ iPhone</span>
+                    </div>
+                    <div class="sheet-arrow">›</div>
+                </div>
                 <div class="sheet-item" onclick="closeToolsMenu(); backupFullData()">
                     <div class="sheet-icon bg-green">💾</div>
                     <div class="sheet-info">
@@ -3383,20 +3545,25 @@
                     <option value="nghidinh">Nghị định</option>
                     <option value="ubnd">UBND</option>
                     <option value="pdf">📄 Tệp PDF</option>
+                    <option value="word">📘 Tài liệu Word</option>
+                    <option value="excel">📗 Bảng tính Excel / CSV</option>
+                    <option value="image">🖼️ Hình ảnh (PNG/JPG)</option>
                     <option value="html">🌐 Trang HTML</option>
+                    <option value="text">📝 Tệp văn bản (TXT/MD)</option>
+                    <option value="file">📎 Tệp đính kèm khác</option>
                     <option value="khac">Khác</option>
                 </select>
             </div>
 
             <!-- ─── KHU VỰC ĐÍNH KÈM TỆP HỢP NHẤT (PDF hoặc HTML) ─── -->
             <div class="form-group unified-file-box">
-                <label>Đính kèm tệp <span style="font-weight:normal;color:var(--text-light);font-size:12px;">(PDF hoặc HTML - tự nhận diện)</span></label>
-                <input type="file" id="unifiedFileInput" accept=".pdf,.html,.htm,application/pdf,text/html" onchange="handleUnifiedFileSelect(event)" class="sr-only-file-input" />
+                <label>Đính kèm tệp <span style="font-weight:normal;color:var(--text-light);font-size:12px;">(PDF, Word, Excel, Ảnh, HTML, TXT...)</span></label>
+                <input type="file" id="unifiedFileInput" accept=".pdf,.html,.htm,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.webp,.gif,.zip,application/pdf,text/html,image/*,text/plain" onchange="handleUnifiedFileSelect(event)" class="sr-only-file-input" />
                 <label for="unifiedFileInput" id="unifiedDropZone" class="unified-dropzone">
                     <div class="drop-icon">📎</div>
                     <div class="drop-text">
-                        <strong>Chạm để đính kèm tệp PDF hoặc HTML</strong>
-                        <span>Tự động trích xuất tiêu đề, số hiệu & tối ưu tệp</span>
+                        <strong>Chạm để chọn tệp (PDF, Word, Excel, Ảnh, HTML...)</strong>
+                        <span>Tự động nhận diện định dạng, trích tiêu đề & lưu trữ</span>
                     </div>
                 </label>
                 <div id="unifiedAttachedFileInfo" class="unified-file-attached" style="display:none;">
@@ -3515,6 +3682,22 @@
         </div>
     </div>
 
+    
+    <!-- Generic File Preview Modal (Image / Text / Office) -->
+    <div class="modal fullscreen-viewer-modal" id="filePreviewModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <span id="filePreviewTitle" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📎 Xem tệp</span>
+                <button class="close" onclick="closeFilePreview()">✕</button>
+            </div>
+            <div id="filePreviewBody" class="file-preview-body"></div>
+            <div class="pdf-controls" style="display:flex;align-items:center;gap:8px;padding-top:8px;flex-shrink:0;">
+                <button type="button" onclick="shareFileFromPreview()" style="flex:1;min-height:38px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">📤 Chia sẻ / Mở bằng app khác</button>
+                <button type="button" onclick="downloadFileFromPreview()" style="min-height:38px;padding:0 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">⬇️ Tải</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Preview Modal -->
     <div class="modal fullscreen-viewer-modal" id="previewModal">
         <div class="modal-content wide">
@@ -3546,7 +3729,8 @@
                         <button type="button" onclick="zoomPdf(-0.25)" title="Thu nhỏ">−</button>
                         <button type="button" id="pdfZoomLabel" onclick="resetPdfZoom()" title="Đặt lại 100%" style="min-width:44px;">100%</button>
                         <button type="button" onclick="zoomPdf(0.25)" title="Phóng to">＋</button>
-                        <button type="button" onclick="downloadPDFFromPreview()" class="btn btn-success" style="padding:4px 10px;font-size:12px;margin-left:auto;background:var(--green);color:#fff;border-color:var(--green);">⬇️ Tải</button>
+                        <button type="button" onclick="sharePDFFromPreview()" style="padding:4px 10px;font-size:12px;margin-left:auto;background:#2563eb;color:#fff;border-color:#2563eb;">📤 Chia sẻ</button>
+                        <button type="button" onclick="downloadPDFFromPreview()" class="btn btn-success" style="padding:4px 10px;font-size:12px;background:var(--green);color:#fff;border-color:var(--green);">⬇️ Tải</button>
                     </div>
                 </div>
                 <div id="previewError" style="color:var(--red);text-align:center;padding:14px;display:none;">❌ Không thể tải PDF</div>
@@ -3566,6 +3750,7 @@
                 <label title="Hiển thị như màn hình máy tính rồi thu nhỏ vừa khung, để mục lục bên trái không bị ẩn"><input type="checkbox" id="htmlDesktopLayout" checked onchange="layoutHtmlFrame()" /> Bố cục máy tính</label>
                 <span class="spacer"></span>
                 <button id="htmlFullscreenBtn" onclick="toggleHtmlFullscreen()">⛶ Toàn màn hình</button>
+                <button style="background:#2563eb;color:#fff;border-color:#2563eb;" onclick="shareHTMLFromPreview()">📤 Chia sẻ</button>
                 <button class="btn-success" onclick="downloadHTMLFromPreview()">⬇️ Tải</button>
             </div>
             <div class="html-frame-holder" id="htmlFrameHolder"></div>
@@ -4825,9 +5010,11 @@
                         n = foldVietnamese(d.notes),
                         a = foldVietnamese(d.author),
                         pf = foldVietnamese(d.pdfFilename),
-                        hf = foldVietnamese(d.htmlFilename);
-                    const metaMatch = smartTextMatch(c + ' ' + t + ' ' + n + ' ' + a + ' ' + pf + ' ' + hf, fq);
+                        hf = foldVietnamese(d.htmlFilename),
+                        fn = foldVietnamese(d.fileName);
+                    const metaMatch = smartTextMatch(c + ' ' + t + ' ' + n + ' ' + a + ' ' + pf + ' ' + hf + ' ' + fn, fq);
                     if (metaMatch) return true;
+                    if (d.fileText && smartTextMatch(foldVietnamese(d.fileText), fq)) return true;
                     if (d.htmlData && smartTextMatch(getHtmlSearchText(d), fq)) return true;
                     if (fq.length >= 2 && d.pdfText && pdfTextHas(d, search)) return true;
                     return false;
@@ -4856,7 +5043,7 @@
         }
 
         function getTypeLabel(t) {
-            const map = { thongtu: 'Thông tư', quyetdinh: 'Quyết định', nghidinh: 'Nghị định', ubnd: 'UBND', pdf: 'PDF', html: 'HTML' };
+            const map = { thongtu: 'Thông tư', quyetdinh: 'Quyết định', nghidinh: 'Nghị định', ubnd: 'UBND', pdf: 'PDF', html: 'HTML', word: 'Word', excel: 'Excel', image: 'Ảnh', text: 'Văn bản', file: 'Tệp' };
             return map[t] || t;
         }
 
@@ -4873,6 +5060,8 @@
         function getFileSize(d) {
             if (d.pdfData) return d.pdfData.length * 0.75;
             if (d.htmlData) return d.htmlSize || d.htmlData.length;
+            if (d.fileSize) return d.fileSize;
+            if (d.fileData) return d.fileData.length * 0.75;
             return null;
         }
 
@@ -4931,6 +5120,7 @@
             grid.innerHTML = filtered.map(doc => {
                 const hasPdf = !!doc.pdfData,
                     hasHtml = !!doc.htmlData,
+                    hasGenericFile = !!doc.fileData,
                     fileSize = getFileSize(doc),
                     isFav = doc.favorite || false;
                 let sizeDisplay = '';
@@ -4938,8 +5128,8 @@
                     sizeDisplay =
                         `<div class="file-size-info"><span class="size-label">📦</span><span class="size-value">${formatFileSize(fileSize)}</span>${hasPdf && doc.compressedRatio?`<span class="size-compressed">(-${doc.compressedRatio}%)</span>`:''}</div>`;
                 }
-                const openCall = hasPdf ? `openPreviewModal(${doc.id})` : hasHtml ? `openHtmlPreview(${doc.id})` : `viewDetail(${doc.id})`;
-                const noFile = !hasPdf && !hasHtml;
+                const openCall = hasPdf ? `openPreviewModal(${doc.id})` : hasHtml ? `openHtmlPreview(${doc.id})` : hasGenericFile ? `openFilePreview(${doc.id})` : `viewDetail(${doc.id})`;
+                const noFile = !hasPdf && !hasHtml && !hasGenericFile;
                 const statusClass = doc.status === 'active' ? 'active' : 'expired';
                 const statusText = doc.status === 'active' ? '✅ Hiệu lực' : '❌ Hết hiệu lực';
                 const pdfBadge = hasPdf ? `<span class="badge-pdf-attach">📄 PDF</span>` : '';
@@ -4949,28 +5139,28 @@
                 const folderClick = doc.folderId ? `selectFolder('${esc(doc.folderId)}')` : `selectFolder(null)`;
                 const folderBadge = `<button type="button" class="card-folder-tag ${folderPath ? 'has-folder' : 'no-folder'}" onclick="event.stopPropagation(); ${folderClick}" title="Xem thư mục này">📁 ${esc(folderLabel)}</button>`;
                 return `
-                    <div class="card type-${esc(doc.type)}">
-                        <button class="favorite-star ${isFav?'active':''}" onclick="toggleFavorite(${doc.id})" title="Yêu thích">${isFav?'⭐':'☆'}</button>
-                        <span class="badge ${getBadgeClass(doc.type)}">${esc(getTypeLabel(doc.type))} ${pdfBadge}${htmlBadge}</span>
-                        <div class="code clickable" onclick="${openCall}">${esc(doc.code)}</div>
-                        <div class="title clickable" onclick="${openCall}">${esc(doc.title)}</div>
-                        <div class="author">🏛️ ${esc(doc.author||'—')}</div>
-                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:4px 0;"><span class="status-badge ${statusClass}">${statusText}</span>${folderBadge}</div>
-                        ${pdfHitHtml(doc, searchQ)}${htmlHitHtml(doc, searchQ)}
-                        ${noFile ? `<div class="no-file-note">⚠️ Chưa có file đính kèm nên chưa xem được nội dung. Bấm "📎 Đính kèm file" để gắn PDF hoặc HTML vào tài liệu này.</div>` : ''}
-                        <div class="meta-row">
-                            <div class="meta-item"><span class="m-label">Bản hành</span><span class="m-value">${formatDate(doc.issuedDate)}</span></div>
-                            <div class="meta-item"><span class="m-label">Hiệu lực</span><span class="m-value">${formatDate(doc.effectiveDate)}</span></div>
+                    <div class="card compact-card type-${esc(doc.type)}">
+                        <div class="compact-card-top">
+                            <span class="badge ${getBadgeClass(doc.type)}">${hasPdf ? '📄 PDF' : hasHtml ? '🌐 HTML' : esc(getTypeLabel(doc.type))}</span>
+                            ${folderBadge}
+                            <button class="favorite-star ${isFav?'active':''}" onclick="toggleFavorite(${doc.id})" title="Yêu thích">${isFav?'⭐':'☆'}</button>
                         </div>
-                        ${sizeDisplay}
+                        <div class="compact-card-title" onclick="${openCall}">${esc(doc.title)}</div>
+                        <div class="compact-card-sub" onclick="${openCall}">${[
+                            doc.code && doc.code !== doc.title ? esc(doc.code) : '',
+                            fileSize ? '📦 ' + formatFileSize(fileSize) : '',
+                            doc.status === 'expired' ? '❌ Hết hiệu lực' : ''
+                        ].filter(Boolean).join(' • ') || 'Chạm để xem chi tiết'}</div>
+                        ${pdfHitHtml(doc, searchQ)}${htmlHitHtml(doc, searchQ)}
                         <div class="card-actions">
-                            <button class="btn btn-detail" onclick="viewDetail(${doc.id})">🔍 Chi tiết</button>
-                            ${hasPdf?`<button class="btn btn-preview" onclick="openPreviewModal(${doc.id})">👁️ Xem</button><button class="btn btn-download" onclick="downloadPDF(${doc.id})">⬇️ Tải</button>`:''}
-                            ${hasHtml?`<button class="btn btn-preview" onclick="openHtmlPreview(${doc.id})">👁️ Xem</button><button class="btn btn-download" onclick="downloadHTML(${doc.id})">⬇️ Tải</button>`:''}
-                            ${noFile ? `<button class="btn btn-attach" onclick="attachFile(${doc.id})">📎 Đính kèm file</button>` : ''}
-                            <button class="btn btn-folder" onclick="openMoveFolderModal(${doc.id})">📁 Di chuyển</button>
-                            <button class="btn btn-outline" onclick="editDocument(${doc.id})">✏️</button>
-                            <button class="btn btn-danger" onclick="deleteDocument(${doc.id})">🗑️</button>
+                            ${hasPdf ? `<button class="btn btn-preview" onclick="openPreviewModal(${doc.id})">👁️ Xem PDF</button>` : ''}
+                            ${hasHtml ? `<button class="btn btn-preview" onclick="openHtmlPreview(${doc.id})">👁️ Xem HTML</button>` : ''}
+                            ${hasGenericFile ? `<button class="btn btn-preview" onclick="openFilePreview(${doc.id})">👁️ Xem tệp</button>` : ''}
+                            ${noFile ? `<button class="btn btn-attach" onclick="attachFile(${doc.id})">📎 Đính kèm</button>` : ''}
+                            <button class="btn btn-detail" onclick="viewDetail(${doc.id})" title="Xem toàn bộ thông tin">ℹ️ Chi tiết</button>
+                            <button class="btn btn-folder" onclick="openMoveFolderModal(${doc.id})" title="Chuyển thư mục">📁</button>
+                            <button class="btn btn-outline" onclick="editDocument(${doc.id})" title="Sửa">✏️</button>
+                            <button class="btn btn-danger" onclick="deleteDocument(${doc.id})" title="Xóa">🗑️</button>
                         </div>
                     </div>
                 `;
@@ -5478,7 +5668,44 @@
                     showAddMessage('❌ Lỗi xử lý HTML: ' + e.message, 'error');
                 }
             } else {
-                showAddMessage('⚠️ Vui lòng chọn tệp .pdf hoặc .html', 'warning');
+                // Hỗ trợ Ảnh, Văn bản (TXT/MD/CSV/JSON), Word, Excel, PowerPoint, ZIP...
+                if (file.size > 60 * 1024 * 1024) {
+                    showAddMessage(`❌ File quá lớn (${formatFileSize(file.size)}). Tối đa 60 MB`, 'error');
+                    event.target.value = '';
+                    return;
+                }
+                const isImage = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'heic'].includes(ext) || (file.type && file.type.startsWith('image/'));
+                const isWord = ['doc', 'docx', 'rtf', 'odt'].includes(ext);
+                const isExcel = ['xls', 'xlsx', 'csv', 'ods'].includes(ext);
+                const isText = ['txt', 'md', 'json', 'log', 'xml'].includes(ext) || (file.type && file.type.startsWith('text/'));
+
+                const detectedType = isImage ? 'image' : isWord ? 'word' : isExcel ? 'excel' : isText ? 'text' : 'file';
+                const iconMap = { image: '🖼️', word: '📘', excel: '📗', text: '📝', file: '📎' };
+
+                document.getElementById('docType').value = detectedType;
+                const cleanName = file.name.replace(/\.[^/.]+$/, '').trim();
+                if (!document.getElementById('docCode').value) document.getElementById('docCode').value = cleanName;
+                if (!document.getElementById('docTitle').value) document.getElementById('docTitle').value = cleanName;
+
+                try {
+                    const buffer = await file.arrayBuffer();
+                    const b64 = bytesToBase64Safe(new Uint8Array(buffer));
+                    let extractedText = '';
+                    if (isText || ext === 'csv') {
+                        extractedText = decodeHtmlBuffer(buffer).slice(0, 500000);
+                    }
+                    currentAttachedFile = {
+                        type: detectedType,
+                        data: b64,
+                        filename: file.name,
+                        mime: file.type || 'application/octet-stream',
+                        size: file.size,
+                        text: extractedText
+                    };
+                    showAttachedFileInfo(iconMap[detectedType], file.name, `${getTypeLabel(detectedType)} • ${formatFileSize(file.size)}`);
+                } catch (e) {
+                    showAddMessage('❌ Lỗi đọc tệp: ' + e.message, 'error');
+                }
             }
             event.target.value = '';
         }
@@ -5565,6 +5792,12 @@
                     doc.htmlData = currentAttachedFile.content;
                     doc.htmlFilename = currentAttachedFile.filename;
                     doc.htmlSize = currentAttachedFile.size || (currentAttachedFile.content ? currentAttachedFile.content.length : 0);
+                } else {
+                    doc.fileData = currentAttachedFile.data;
+                    doc.fileName = currentAttachedFile.filename;
+                    doc.fileMime = currentAttachedFile.mime || 'application/octet-stream';
+                    doc.fileSize = currentAttachedFile.size || 0;
+                    if (currentAttachedFile.text) doc.fileText = currentAttachedFile.text;
                 }
             }
 
@@ -5581,6 +5814,11 @@
                             delete doc.htmlData;
                             delete doc.htmlFilename;
                             delete doc.htmlSize;
+                            delete doc.fileData;
+                            delete doc.fileName;
+                            delete doc.fileMime;
+                            delete doc.fileSize;
+                            delete doc.fileText;
                         }
                     }
                     await updateDocument(doc);
@@ -5633,6 +5871,17 @@
                     size: doc.htmlSize || 0
                 };
                 showAttachedFileInfo('🌐', doc.htmlFilename || 'trang.html', 'Tệp HTML đính kèm');
+            } else if (doc.fileData) {
+                attachedFileRemoved = false;
+                currentAttachedFile = {
+                    type: doc.type,
+                    data: doc.fileData,
+                    filename: doc.fileName || 'tep-dinh-kem',
+                    mime: doc.fileMime || 'application/octet-stream',
+                    size: doc.fileSize || 0,
+                    text: doc.fileText || ''
+                };
+                showAttachedFileInfo('📎', doc.fileName || 'tep-dinh-kem', `${getTypeLabel(doc.type)} • ${formatFileSize(doc.fileSize || 0)}`);
             } else {
                 attachedFileRemoved = false;
                 removeAttachedFile(false);
@@ -6767,6 +7016,7 @@
         // ═══════════════════════════════════════════════
         function openToolsMenu() {
             updateToolsThemeLabel();
+            if (typeof updateToolsStorageInfo === "function") updateToolsStorageInfo();
             const modal = document.getElementById('toolsMenuModal');
             if (modal) modal.classList.add('active');
         }
@@ -6914,6 +7164,164 @@
             const hasToolbarFilter = (typeVal !== '') || (sortVal !== 'date-desc') || (favVal !== '');
             const isOpen = grid && grid.classList.contains('open');
             btn.classList.toggle('active', isOpen || hasToolbarFilter);
+        }
+
+        
+        // ═══════════════════════════════════════════════
+        //  IOS SHARE SHEET & GIÁM SÁT DUNG LƯỢNG BỘ NHỚ
+        // ═══════════════════════════════════════════════
+        async function shareBlob(blob, name, title = '') {
+            try {
+                if (navigator.share && typeof File !== 'undefined') {
+                    const file = new File([blob], name, { type: blob.type || 'application/octet-stream' });
+                    if (!navigator.canShare || navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: title || name
+                        });
+                        return true;
+                    }
+                }
+            } catch (e) {
+                if (e && e.name === 'AbortError') return false;
+                console.warn('Chuyển sang tải xuống thông thường:', e);
+            }
+            return await downloadBlob(blob, name);
+        }
+
+        function sharePDFFromPreview() {
+            if (!currentPreviewId) return;
+            const doc = documents.find(d => d.id === currentPreviewId);
+            if (!doc || !doc.pdfData) { alert('Không có PDF'); return; }
+            try {
+                const bytes = base64ToBytesSafe(doc.pdfData);
+                const blob = new Blob([bytes], { type: 'application/pdf' });
+                const fileName = (doc.pdfFilename && doc.pdfFilename.toLowerCase().endsWith('.pdf'))
+                    ? doc.pdfFilename
+                    : ((doc.code || 'tai-lieu') + '.pdf');
+                shareBlob(blob, fileName, doc.title || doc.code);
+            } catch (e) { alert('Lỗi chia sẻ: ' + e.message); }
+        }
+
+        function shareHTMLFromPreview() {
+            if (!currentHtmlPreviewId) return;
+            const doc = documents.find(d => d.id === currentHtmlPreviewId);
+            if (!doc || !doc.htmlData) { alert('Không có nội dung HTML'); return; }
+            const name = doc.htmlFilename || ((doc.code || 'tai-lieu') + '.html');
+            const blob = new Blob([doc.htmlData], { type: 'text/html;charset=utf-8' });
+            shareBlob(blob, name, doc.title || doc.code);
+        }
+
+        async function shareBackupData() {
+            if (documents.length === 0 && folders.length === 0) { alert('❌ Không có dữ liệu để sao lưu'); return; }
+            const backupData = {
+                folders: folders,
+                documents: documents.map(d => {
+                    const { pdfData, ...rest } = d;
+                    return { ...rest, pdfData: pdfData || null };
+                }),
+                backupDate: new Date().toISOString(),
+                version: 3
+            };
+            const jsonStr = JSON.stringify(backupData, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+            const dateTag = new Date().toISOString().split('T')[0];
+            const ok = await shareBlob(blob, `kho-tai-lieu-backup-${dateTag}.json`, 'Sao lưu Kho Tài Liệu Pro');
+            if (ok && typeof bkMark === 'function') bkMark();
+        }
+
+        async function updateToolsStorageInfo() {
+            const usedEl = document.getElementById('toolsStorageUsed');
+            const barEl = document.getElementById('toolsStorageBar');
+            const detEl = document.getElementById('toolsStorageDetail');
+            if (!usedEl || !detEl) return;
+
+            let docBytes = 0, pdfCount = 0, htmlCount = 0;
+            documents.forEach(d => {
+                const s = getFileSize(d) || 0;
+                docBytes += s;
+                if (d.pdfData) pdfCount++;
+                if (d.htmlData) htmlCount++;
+            });
+
+            try {
+                if (navigator.storage && navigator.storage.estimate) {
+                    const est = await navigator.storage.estimate();
+                    const usage = est.usage || docBytes;
+                    const quota = est.quota || 0;
+                    const pct = quota > 0 ? Math.min(100, Math.max(2, Math.round((usage / quota) * 100))) : 5;
+                    usedEl.textContent = formatFileSize(usage);
+                    if (barEl) barEl.style.width = pct + '%';
+                    detEl.textContent = `${documents.length} tài liệu (${pdfCount} PDF, ${htmlCount} HTML) • ${folders.length} thư mục`;
+                    return;
+                }
+            } catch (e) {}
+
+            usedEl.textContent = formatFileSize(docBytes);
+            if (barEl) barEl.style.width = '8%';
+            detEl.textContent = `${documents.length} tài liệu (${pdfCount} PDF, ${htmlCount} HTML) • ${folders.length} thư mục`;
+        }
+
+        
+        let currentFilePreviewId = null;
+
+        function openFilePreview(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc || !doc.fileData) { alert('Không có dữ liệu tệp'); return; }
+            currentFilePreviewId = id;
+            const titleEl = document.getElementById('filePreviewTitle');
+            const bodyEl = document.getElementById('filePreviewBody');
+            const name = doc.fileName || doc.title || doc.code || 'Tệp đính kèm';
+            if (titleEl) titleEl.textContent = `📎 ${name}`;
+            if (!bodyEl) return;
+
+            const mime = (doc.fileMime || '').toLowerCase();
+            const isImg = doc.type === 'image' || mime.startsWith('image/');
+            const isText = doc.type === 'text' || (!!doc.fileText && (doc.type === 'excel' || mime.startsWith('text/')));
+
+            if (isImg) {
+                const src = `data:${doc.fileMime || 'image/png'};base64,${doc.fileData}`;
+                bodyEl.innerHTML = `<img src="${src}" class="file-preview-img" alt="${esc(name)}" />`;
+            } else if (isText && doc.fileText) {
+                bodyEl.innerHTML = `<pre class="file-preview-text">${esc(doc.fileText)}</pre>`;
+            } else {
+                const iconMap = { word: '📘', excel: '📗', file: '📎' };
+                const ic = iconMap[doc.type] || '📄';
+                bodyEl.innerHTML = `
+                    <div class="file-preview-office">
+                        <div class="big-icon">${ic}</div>
+                        <div class="file-title">${esc(name)}</div>
+                        <div class="file-meta">${esc(getTypeLabel(doc.type))} • ${formatFileSize(getFileSize(doc) || 0)}</div>
+                        <div class="file-meta" style="margin-top:6px;">Trên iPhone, hãy chạm <b>📤 Chia sẻ / Mở bằng app khác</b> bên dưới để xem ngay bằng Word, Excel, Pages hoặc Tệp!</div>
+                    </div>
+                `;
+            }
+            document.getElementById('filePreviewModal').classList.add('active');
+        }
+
+        function closeFilePreview() {
+            document.getElementById('filePreviewModal').classList.remove('active');
+            const bodyEl = document.getElementById('filePreviewBody');
+            if (bodyEl) bodyEl.innerHTML = '';
+            currentFilePreviewId = null;
+        }
+
+        function downloadFileFromPreview() {
+            if (!currentFilePreviewId) return;
+            const doc = documents.find(d => d.id === currentFilePreviewId);
+            if (!doc || !doc.fileData) return;
+            const bytes = base64ToBytesSafe(doc.fileData);
+            const blob = new Blob([bytes], { type: doc.fileMime || 'application/octet-stream' });
+            downloadBlob(blob, doc.fileName || ((doc.code || 'file') + '.bin'));
+        }
+
+        function shareFileFromPreview() {
+            if (!currentFilePreviewId) return;
+            const doc = documents.find(d => d.id === currentFilePreviewId);
+            if (!doc || !doc.fileData) return;
+            const bytes = base64ToBytesSafe(doc.fileData);
+            const blob = new Blob([bytes], { type: doc.fileMime || 'application/octet-stream' });
+            shareBlob(blob, doc.fileName || ((doc.code || 'file') + '.bin'), doc.title || doc.code);
         }
 
         // ─── START ───
