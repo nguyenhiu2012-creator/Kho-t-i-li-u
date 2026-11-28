@@ -678,7 +678,8 @@
                 z-index: 1000 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                max-height: 72dvh !important;
+                height: 70dvh !important;
+                max-height: 75dvh !important;
                 border-radius: 20px 20px 0 0 !important;
                 padding: 10px 14px calc(var(--sab) + 14px) !important;
                 margin: 0 !important;
@@ -697,7 +698,9 @@
                 color: var(--text) !important;
             }
             .folder-sidebar .folder-list {
-                max-height: 48dvh !important;
+                flex: 1 1 auto !important;
+                max-height: none !important;
+                min-height: 0 !important;
                 padding: 4px 2px !important;
             }
             .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item {
