@@ -649,6 +649,106 @@
             }
         }
 
+    
+        /* ─── THƯ MỤC KIỂU APPLE FILES BOTTOM SHEET TRÊN IPHONE ─── */
+        .folder-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+        }
+        .mobile-only-handle {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .folder-backdrop.active {
+                display: block;
+            }
+            .mobile-only-handle {
+                display: block;
+            }
+            .folder-sidebar:not(.collapsed) {
+                position: fixed !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                top: auto !important;
+                z-index: 1000 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: 72dvh !important;
+                border-radius: 20px 20px 0 0 !important;
+                padding: 10px 14px calc(var(--sab) + 14px) !important;
+                margin: 0 !important;
+                box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.22) !important;
+                animation: slideUp 0.22s ease-out;
+                border: none !important;
+            }
+            .folder-sidebar .sidebar-header {
+                padding: 4px 4px 8px !important;
+                border-bottom: 1px solid var(--border);
+                margin-bottom: 4px;
+            }
+            .folder-sidebar .sidebar-header h3 {
+                font-size: 14px !important;
+                font-weight: 700 !important;
+                color: var(--text) !important;
+            }
+            .folder-sidebar .folder-list {
+                max-height: 48dvh !important;
+                padding: 4px 2px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item {
+                border: none !important;
+                border-bottom: 1px solid var(--border) !important;
+                border-radius: 8px !important;
+                background: transparent !important;
+                min-height: 40px !important;
+                padding: 6px 10px !important;
+                margin-bottom: 2px !important;
+                font-size: 14px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active {
+                background: var(--green-bg) !important;
+                border: none !important;
+                border-radius: 10px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-name {
+                font-size: 14px !important;
+            }
+            .sidebar-footer {
+                padding: 8px 2px 0 !important;
+            }
+            .sidebar-footer .btn-add-folder {
+                min-height: 38px !important;
+                font-size: 13px !important;
+                border-radius: 10px !important;
+            }
+        }
+        /* Giữ nguyên cột bên trái khi xoay ngang (Landscape) */
+        @media screen and (max-height: 520px) and (orientation: landscape) {
+            .folder-backdrop {
+                display: none !important;
+            }
+            .mobile-only-handle {
+                display: none !important;
+            }
+            .folder-sidebar:not(.collapsed) {
+                position: static !important;
+                border-radius: var(--radius) !important;
+                max-height: calc(100dvh - 65px) !important;
+                padding: 8px 0 !important;
+                box-shadow: var(--shadow) !important;
+                animation: none !important;
+                width: auto !important;
+            }
+            .folder-sidebar .folder-list {
+                max-height: none !important;
+            }
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3351,7 +3451,9 @@
             <div class="mindmap-note" id="mindmapNote"></div>
         </div>
         <!-- ─── SIDEBAR ─── -->
+        <div id="folderBackdrop" class="folder-backdrop" onclick="toggleSidebar()"></div>
         <div class="folder-sidebar collapsed" id="folderSidebar">
+            <div class="sheet-handle mobile-only-handle"></div>
             <div class="sidebar-header">
                 <h3>📁 Thư mục</h3>
                 <button class="btn-icon" onclick="toggleSidebar()" title="Thu gọn">◀</button>
@@ -4410,10 +4512,12 @@
             const sidebar = document.getElementById('folderSidebar');
             const btn = document.getElementById('sidebarToggleBtn');
             const hdrBtn = document.getElementById('headerFolderToggle');
+            const backdrop = document.getElementById('folderBackdrop');
             if (!sidebar) return;
             const isCollapsed = sidebar.classList.toggle('collapsed');
             if (btn) btn.style.display = 'none';
             if (hdrBtn) hdrBtn.classList.toggle('active', !isCollapsed);
+            if (backdrop) backdrop.classList.toggle('active', !isCollapsed);
         }
 
         function updateSubFolderButton() {
@@ -4427,17 +4531,33 @@
             }
         }
 
+        
+        function getRecursiveFolderDocCount(folderId) {
+            const ids = new Set([folderId]);
+            let added = true;
+            while (added) {
+                added = false;
+                for (const f of folders) {
+                    if (f.parentId && ids.has(f.parentId) && !ids.has(f.id)) {
+                        ids.add(f.id);
+                        added = true;
+                    }
+                }
+            }
+            return documents.filter(d => d.folderId && ids.has(d.folderId)).length;
+        }
+
         function buildFolderTree(parentId, level) {
             const children = folders.filter(f => f.parentId === parentId || (f.parentId === null && parentId === null) || (
                 f.parentId === undefined && parentId === null));
-            children.sort((a, b) => a.name.localeCompare(b.name));
+            children.sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true, sensitivity: 'base' }));
 
             let html = '';
             for (const f of children) {
                 const isExpanded = expandedFolders[f.id] || false;
                 const subChildren = folders.filter(c => c.parentId === f.id);
                 const hasChildren = subChildren.length > 0;
-                const count = documents.filter(d => d.folderId === f.id).length;
+                const count = getRecursiveFolderDocCount(f.id);
                 const active = selectedFolderId === f.id ? 'active' : '';
 
                 html += `<li class="folder-tree-node">`;
@@ -4446,8 +4566,6 @@
                 // Toggle icon (nếu có con)
                 if (hasChildren) {
                     html += `<span class="toggle-icon ${isExpanded?'rotated':''}" onclick="event.stopPropagation();toggleFolderExpand('${f.id}')">▶</span>`;
-                } else {
-                    html += `<span class="toggle-icon" style="color:transparent;">▶</span>`;
                 }
 
                 html += `<span class="folder-icon">📁</span>`;
@@ -4475,7 +4593,7 @@
         function renderSidebar() {
             const container = document.getElementById('folderList');
             const rootFolders = folders.filter(f => !f.parentId);
-            rootFolders.sort((a, b) => a.name.localeCompare(b.name));
+            rootFolders.sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true, sensitivity: 'base' }));
 
             let html = `<ul class="folder-tree">`;
             // "Tất cả" luôn ở đầu
@@ -4498,7 +4616,7 @@
                 const isExpanded = expandedFolders[f.id] || false;
                 const subChildren = folders.filter(c => c.parentId === f.id);
                 const hasChildren = subChildren.length > 0;
-                const count = documents.filter(d => d.folderId === f.id).length;
+                const count = getRecursiveFolderDocCount(f.id);
                 const active = selectedFolderId === f.id ? 'active' : '';
 
                 html += `<li class="folder-tree-node">`;
@@ -4887,7 +5005,7 @@
                 const renderOptions = (parentId, prefix) => {
                     const children = folders.filter(f => f.parentId === parentId || (f.parentId === null &&
                         parentId === null) || (f.parentId === undefined && parentId === null));
-                    children.sort((a, b) => a.name.localeCompare(b.name));
+                    children.sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true, sensitivity: 'base' }));
                     for (const f of children) {
                         const opt = document.createElement('option');
                         opt.value = f.id;
@@ -4914,6 +5032,10 @@
             await loadAllData();
             renderSidebar();
             renderCards();
+            if (window.innerWidth <= 768 && window.innerHeight > 520) {
+                const sb = document.getElementById('folderSidebar');
+                if (sb && !sb.classList.contains('collapsed')) toggleSidebar();
+            }
             // Mở rộng folder cha nếu có
             if (id) {
                 const f = folders.find(x => x.id === id);
