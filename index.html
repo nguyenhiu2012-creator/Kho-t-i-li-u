@@ -2848,12 +2848,44 @@
                 padding: 6px 12px;
                 margin: 4px 0 6px;
             }
+            :root {
+                --folder-indent: 12px;
+            }
             .folder-sidebar {
-                flex: 0 0 210px !important;
+                flex: 0 0 var(--sidebar-width, clamp(230px, 32vw, 380px)) !important;
+                min-width: 170px;
+                max-width: 55vw;
                 max-height: calc(100dvh - 65px) !important;
             }
+            .folder-sidebar.collapsed {
+                flex: 0 0 0 !important;
+                min-width: 0 !important;
+                width: 0 !important;
+                overflow: hidden !important;
+            }
             .resizer {
-                display: none !important;
+                display: flex !important;
+                width: 14px;
+                touch-action: none;
+            }
+            .folder-list {
+                overflow-x: auto;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .folder-tree .folder-tree-node .folder-item {
+                white-space: normal !important;
+                align-items: flex-start;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            .folder-tree .folder-tree-node .folder-item .folder-name {
+                white-space: normal !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+                word-break: break-word;
+                line-height: 1.3;
+                font-size: 12px;
             }
             .modal-content {
                 margin-top: 6px;

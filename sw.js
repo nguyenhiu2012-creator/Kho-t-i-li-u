@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kho-tai-lieu-pro-v20';
+const CACHE_NAME = 'kho-tai-lieu-pro-v21';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
