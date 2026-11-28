@@ -650,109 +650,7 @@
         }
 
     
-        /* ─── THƯ MỤC KIỂU APPLE FILES BOTTOM SHEET TRÊN IPHONE ─── */
-        .folder-backdrop {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(3px);
-            z-index: 999;
-        }
-        .mobile-only-handle {
-            display: none;
-        }
-        @media (max-width: 768px) {
-            .folder-backdrop.active {
-                display: block;
-            }
-            .mobile-only-handle {
-                display: block;
-            }
-            .folder-sidebar:not(.collapsed) {
-                position: fixed !important;
-                left: 0 !important;
-                right: 0 !important;
-                bottom: 0 !important;
-                top: auto !important;
-                z-index: 1000 !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                height: 70dvh !important;
-                max-height: 75dvh !important;
-                border-radius: 20px 20px 0 0 !important;
-                padding: 10px 14px calc(var(--sab) + 14px) !important;
-                margin: 0 !important;
-                box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.22) !important;
-                animation: slideUp 0.22s ease-out;
-                border: none !important;
-            }
-            .folder-sidebar .sidebar-header {
-                padding: 4px 4px 8px !important;
-                border-bottom: 1px solid var(--border);
-                margin-bottom: 4px;
-            }
-            .folder-sidebar .sidebar-header h3 {
-                font-size: 14px !important;
-                font-weight: 700 !important;
-                color: var(--text) !important;
-            }
-            .folder-sidebar .folder-list {
-                flex: 1 1 auto !important;
-                max-height: none !important;
-                min-height: 0 !important;
-                padding: 4px 2px !important;
-            }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item {
-                border: none !important;
-                border-bottom: 1px solid var(--border) !important;
-                border-radius: 8px !important;
-                background: transparent !important;
-                min-height: 40px !important;
-                padding: 6px 10px !important;
-                margin-bottom: 2px !important;
-                font-size: 14px !important;
-            }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active {
-                background: var(--green-bg) !important;
-                border: none !important;
-                border-radius: 10px !important;
-            }
-            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-name {
-                font-size: 14px !important;
-            }
-            .sidebar-footer {
-                padding: 8px 2px 0 !important;
-            }
-            .sidebar-footer .btn-add-folder {
-                min-height: 38px !important;
-                font-size: 13px !important;
-                border-radius: 10px !important;
-            }
-        }
-        /* Giữ nguyên cột bên trái khi xoay ngang (Landscape) */
-        @media screen and (max-height: 520px) and (orientation: landscape) {
-            .folder-backdrop {
-                display: none !important;
-            }
-            .mobile-only-handle {
-                display: none !important;
-            }
-            .folder-sidebar:not(.collapsed) {
-                position: static !important;
-                border-radius: var(--radius) !important;
-                max-height: calc(100dvh - 65px) !important;
-                padding: 8px 0 !important;
-                box-shadow: var(--shadow) !important;
-                animation: none !important;
-                width: auto !important;
-            }
-            .folder-sidebar .folder-list {
-                max-height: none !important;
-            }
-        }
-
-    </style></head><body>
+        </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -3281,7 +3179,7 @@
             .folder-sidebar .folder-list {
                 display: block;
                 padding: 2px 6px !important;
-                max-height: 150px !important;
+                max-height: none;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
                 overscroll-behavior: contain;
@@ -3390,6 +3288,110 @@
                 padding: 4px 8px !important;
             }
         }
+    
+        /* ─── THƯ MỤC KIỂU APPLE FILES BOTTOM SHEET TRÊN IPHONE ─── */
+        .folder-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+        }
+        .mobile-only-handle {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .folder-backdrop.active {
+                display: block;
+            }
+            .mobile-only-handle {
+                display: block;
+            }
+            .folder-sidebar:not(.collapsed) {
+                position: fixed !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                top: auto !important;
+                z-index: 1000 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 70dvh !important;
+                max-height: 75dvh !important;
+                border-radius: 20px 20px 0 0 !important;
+                padding: 10px 14px calc(var(--sab) + 14px) !important;
+                margin: 0 !important;
+                box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.22) !important;
+                animation: slideUp 0.22s ease-out;
+                border: none !important;
+            }
+            .folder-sidebar .sidebar-header {
+                padding: 4px 4px 8px !important;
+                border-bottom: 1px solid var(--border);
+                margin-bottom: 4px;
+            }
+            .folder-sidebar .sidebar-header h3 {
+                font-size: 14px !important;
+                font-weight: 700 !important;
+                color: var(--text) !important;
+            }
+            .folder-sidebar .folder-list {
+                flex: 1 1 auto !important;
+                max-height: none !important;
+                min-height: 0 !important;
+                padding: 4px 2px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item {
+                border: none !important;
+                border-bottom: 1px solid var(--border) !important;
+                border-radius: 8px !important;
+                background: transparent !important;
+                min-height: 40px !important;
+                padding: 6px 10px !important;
+                margin-bottom: 2px !important;
+                font-size: 14px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item.active {
+                background: var(--green-bg) !important;
+                border: none !important;
+                border-radius: 10px !important;
+            }
+            .folder-sidebar .folder-list .folder-tree .folder-tree-node .folder-item .folder-name {
+                font-size: 14px !important;
+            }
+            .sidebar-footer {
+                padding: 8px 2px 0 !important;
+            }
+            .sidebar-footer .btn-add-folder {
+                min-height: 38px !important;
+                font-size: 13px !important;
+                border-radius: 10px !important;
+            }
+        }
+        /* Giữ nguyên cột bên trái khi xoay ngang (Landscape) */
+        @media screen and (max-height: 520px) and (orientation: landscape) {
+            .folder-backdrop {
+                display: none !important;
+            }
+            .mobile-only-handle {
+                display: none !important;
+            }
+            .folder-sidebar:not(.collapsed) {
+                position: static !important;
+                border-radius: var(--radius) !important;
+                max-height: calc(100dvh - 65px) !important;
+                padding: 8px 0 !important;
+                box-shadow: var(--shadow) !important;
+                animation: none !important;
+                width: auto !important;
+            }
+            .folder-sidebar .folder-list {
+                max-height: none !important;
+            }
+        }
+
+    
     </style>
     <!-- ═══════════ HEADER TINH GỌN CHUẨN IOS ═══════════ -->
     <header class="app-header ios-header">
