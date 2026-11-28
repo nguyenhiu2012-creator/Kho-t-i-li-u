@@ -1,8 +1,9 @@
-const CACHE_NAME = 'kho-tai-lieu-pro-v23';
+const CACHE_NAME = 'kho-tai-lieu-pro-v25';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './manifest.json',
+    './icon-180.png',
     'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
