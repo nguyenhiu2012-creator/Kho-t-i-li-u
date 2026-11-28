@@ -3416,6 +3416,15 @@
         </span>
     </div>
 
+    
+    <div class="backup-bar" id="swUpdateBanner" role="status" aria-live="polite" hidden style="background:var(--green-bg);border-color:var(--green);">
+        <span class="bk-text">✨ Đã có phiên bản mới của ứng dụng!</span>
+        <span class="bk-actions">
+            <button type="button" class="bk-btn primary" onclick="applyPendingSwUpdate()">Cập nhật ngay</button>
+            <button type="button" class="bk-btn" onclick="document.getElementById('swUpdateBanner').hidden=true">Để sau</button>
+        </span>
+    </div>
+
     <!-- ═══════════ HƯỚNG DẪN (ĐÃ GỌN VÀO MENU) ═══════════ -->
     <div class="guide-wrapper" id="guideWrapper" style="display:none;">
         <div class="guide-toggle" onclick="toggleGuide()">
@@ -7074,7 +7083,8 @@
             if (documents.length === 0 && folders.length === 0) { alert('❌ Không có dữ liệu'); return; }
             let totalSize = 0,
                 pdfCount = 0,
-                htmlCount = 0;
+                htmlCount = 0,
+                otherCount = 0;
             const backupData = {
                 folders: folders,
                 documents: documents.map(d => {
@@ -7082,6 +7092,7 @@
                     totalSize += s;
                     if (d.pdfData) pdfCount++;
                     if (d.htmlData) htmlCount++;
+                    if (d.fileData) otherCount++;
                     const { pdfData, ...rest } = d;
                     return { ...rest, pdfData: pdfData || null };
                 }),
@@ -7089,7 +7100,7 @@
                 version: 3
             };
             const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
-            if (!(await kConfirm(`📊 Sao lưu:\n• Tài liệu: ${documents.length}\n• PDF: ${pdfCount}\n• HTML: ${htmlCount}\n• Thư mục: ${folders.length}\n• Dung lượng: ${sizeMB} MB\n\nTiến hành?`))) return;
+            if (!(await kConfirm(`📊 Sao lưu:\n• Tài liệu: ${documents.length}\n• PDF: ${pdfCount}\n• HTML: ${htmlCount}\n• Tệp khác: ${otherCount}\n• Thư mục: ${folders.length}\n• Dung lượng: ${sizeMB} MB\n\nTiến hành?`))) return;
             try {
                 const json = JSON.stringify(backupData, null, 2);
                 const blob = new Blob([json], { type: 'application/json' });
@@ -7121,41 +7132,48 @@
                         if (docs.length === 0 && flds.length === 0) { alert('❌ File trống'); return; }
                         const pdfCount = docs.filter(d => d.pdfData).length;
                         const htmlCount = docs.filter(d => d.htmlData).length;
-                        if (!(await kConfirm(`📊 Phục hồi:\n• Tài liệu: ${docs.length}\n• PDF: ${pdfCount}\n• HTML: ${htmlCount}\n• Thư mục: ${flds.length}\n• Ngày: ${data.backupDate||'Không xác định'}\n\n⚠️ Dữ liệu hiện tại bị GHI ĐÈ!\nTiến hành?`))) return;
-                        await clearAllDocuments();
-                        await clearAllFolders();
-                        // Nhập folder
-                        for (const f of flds) {
-                            await addFolder({
-                                id: f.id || 'f_' + Date.now() + Math.random(),
-                                name: f.name || 'Thư mục',
-                                parentId: f.parentId || null,
-                                createdAt: f.createdAt || new Date().toISOString()
-                            });
-                        }
-                        // Nhập documents
-                        let count = 0;
-                        for (const d of docs) {
-                            await addDocument({
-                                id: d.id || Date.now() + Math.random() * 1000,
-                                type: d.type || 'thongtu',
-                                folderId: d.folderId || null,
-                                code: d.code || 'unknown',
-                                title: d.title || 'Untitled',
-                                author: d.author || '',
-                                issuedDate: d.issuedDate || '',
-                                effectiveDate: d.effectiveDate || '',
-                                status: d.status || 'active',
-                                notes: d.notes || '',
-                                pdfData: d.pdfData || null,
-                                pdfFilename: d.pdfFilename || '',
-                                compressedRatio: d.compressedRatio || null,
+                        const otherCount = docs.filter(d => d.fileData).length;
+                        if (!(await kConfirm(`📊 Phục hồi:\n• Tài liệu: ${docs.length}\n• PDF: ${pdfCount}\n• HTML: ${htmlCount}\n• Tệp khác: ${otherCount}\n• Thư mục: ${flds.length}\n• Ngày: ${data.backupDate||'Không xác định'}\n\n⚠️ Dữ liệu hiện tại bị GHI ĐÈ!\nTiến hành?`))) return;
+                        const preparedFolders = flds.map(f => ({
+                            id: f.id || 'f_' + Date.now() + Math.random(),
+                            name: f.name || 'Thư mục',
+                            parentId: f.parentId || null,
+                            createdAt: f.createdAt || new Date().toISOString()
+                        }));
+                        const preparedDocs = docs.map(d => ({
+                            ...d,
+                            id: d.id || Date.now() + Math.random() * 1000,
+                            type: d.type || 'thongtu',
+                            folderId: d.folderId || null,
+                            code: d.code || 'unknown',
+                            title: d.title || 'Untitled',
+                            author: d.author || '',
+                            issuedDate: d.issuedDate || '',
+                            effectiveDate: d.effectiveDate || '',
+                            status: d.status || 'active',
+                            notes: d.notes || '',
+                            pdfData: d.pdfData || null,
+                            pdfFilename: d.pdfFilename || '',
+                            compressedRatio: d.compressedRatio || null,
                             htmlData: d.htmlData || null,
                             htmlFilename: d.htmlFilename || '',
                             htmlSize: d.htmlSize || null,
+                            ...(d.fileData ? {
+                                fileData: d.fileData,
+                                fileName: d.fileName || '',
+                                fileMime: d.fileMime || 'application/octet-stream',
+                                fileSize: d.fileSize || 0,
+                                ...(d.fileText ? { fileText: d.fileText } : {})
+                            } : {}),
                             ...(typeof d.pdfText === 'string' ? { pdfText: d.pdfText, pdfTextV: d.pdfTextV || 1 } : {}),
-                                favorite: d.favorite || false
-                            });
+                            favorite: d.favorite || false
+                        }));
+                        await clearAllDocuments();
+                        await clearAllFolders();
+                        for (const pf of preparedFolders) await addFolder(pf);
+                        let count = 0;
+                        for (const pd of preparedDocs) {
+                            await addDocument(pd);
                             count++;
                         }
                         await loadAllData();
@@ -7227,22 +7245,39 @@
 
         
         // Đăng ký ServiceWorker cho chế độ Offline PWA (khi chạy HTTPS hoặc localhost)
+        let pendingSwReg = null;
+        let userRequestedSwUpdate = false;
+
+        function promptSwUpdate(reg) {
+            pendingSwReg = reg;
+            const banner = document.getElementById('swUpdateBanner');
+            if (banner) banner.hidden = false;
+        }
+
+        function applyPendingSwUpdate() {
+            userRequestedSwUpdate = true;
+            const banner = document.getElementById('swUpdateBanner');
+            if (banner) banner.hidden = true;
+            if (pendingSwReg && pendingSwReg.waiting) {
+                pendingSwReg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+                window.location.reload();
+            }
+        }
+
         if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then((reg) => {
                     console.log('✅ ServiceWorker Offline PWA sẵn sàng:', reg.scope);
-                    
-                    // Chủ động kiểm tra cập nhật trên máy chủ
-                    reg.update();
-
-                    // Lắng nghe khi có bản cập nhật mới được tải về
+                    if (reg.waiting && navigator.serviceWorker.controller) {
+                        promptSwUpdate(reg);
+                    }
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         if (installingWorker) {
                             installingWorker.onstatechange = () => {
                                 if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showToast('✨ Đã phát hiện phiên bản mới! Ứng dụng sẽ tự làm mới...', 'info');
-                                    setTimeout(() => window.location.reload(), 1500);
+                                    promptSwUpdate(reg);
                                 }
                             };
                         }
@@ -7253,7 +7288,7 @@
 
                 let refreshing = false;
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (!refreshing) {
+                    if (userRequestedSwUpdate && !refreshing) {
                         refreshing = true;
                         window.location.reload();
                     }
