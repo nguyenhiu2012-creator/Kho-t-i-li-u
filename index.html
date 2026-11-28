@@ -599,6 +599,12 @@
         .file-preview-office .file-title { font-size: 15px; font-weight: 700; color: var(--text); word-break: break-word; }
         .file-preview-office .file-meta { font-size: 12px; color: var(--text-light); }
 
+    
+        /* ─── ẨN HOÀN TOÀN THANH NGANG "DANH SÁCH THƯ MỤC" VÌ ĐÃ CÓ NÚT TRÒN 📁 ─── */
+        #sidebarToggleBtn, .sidebar-toggle-btn {
+            display: none !important;
+        }
+
     </style></head><body>
 <title>Kho Tài Liệu Pro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -3244,7 +3250,7 @@
         </div>
         <div class="header-actions ios-header-actions">
             <button type="button" class="ios-btn-icon" id="headerSearchToggle" onclick="toggleSearchBar()" title="Tìm kiếm tài liệu">🔍</button>
-            <button type="button" class="ios-btn-icon" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
+            <button type="button" class="ios-btn-icon" id="headerFolderToggle" onclick="toggleSidebar()" title="Danh sách thư mục">📁</button>
             <button type="button" class="ios-btn-primary" onclick="openAddModal()" title="Thêm tài liệu mới">＋ Thêm</button>
             <button type="button" class="ios-btn-icon" onclick="openToolsMenu()" title="Công cụ & Tiện ích">⋯</button>
             <button type="button" class="ios-btn-icon" id="headerFilterToggle" onclick="toggleQuickToolbar()" title="Yêu thích, Sắp xếp & Loại tệp">🎛️</button>
@@ -3300,7 +3306,7 @@
             <div class="mindmap-note" id="mindmapNote"></div>
         </div>
         <!-- ─── SIDEBAR ─── -->
-        <div class="folder-sidebar" id="folderSidebar">
+        <div class="folder-sidebar collapsed" id="folderSidebar">
             <div class="sidebar-header">
                 <h3>📁 Thư mục</h3>
                 <button class="btn-icon" onclick="toggleSidebar()" title="Thu gọn">◀</button>
@@ -4345,8 +4351,11 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('folderSidebar');
             const btn = document.getElementById('sidebarToggleBtn');
-            sidebar.classList.toggle('collapsed');
-            btn.style.display = sidebar.classList.contains('collapsed') ? 'inline-flex' : 'none';
+            const hdrBtn = document.getElementById('headerFolderToggle');
+            if (!sidebar) return;
+            const isCollapsed = sidebar.classList.toggle('collapsed');
+            if (btn) btn.style.display = 'none';
+            if (hdrBtn) hdrBtn.classList.toggle('active', !isCollapsed);
         }
 
         function updateSubFolderButton() {
