@@ -3392,6 +3392,25 @@
         }
 
     
+    
+        /* ─── MÀN HÌNH CHÍNH MẶC ĐỊNH LÀ SƠ ĐỒ TƯ DUY (NẰM DƯỚI HEADER) ─── */
+        .app-layout.mm-open .cards-grid {
+            display: none !important;
+        }
+        @media (max-width: 768px) {
+            .mindmap-panel {
+                position: relative !important;
+                inset: auto !important;
+                z-index: 1 !important;
+                width: 100% !important;
+                height: calc(100dvh - 88px - var(--sat) - var(--sab)) !important;
+                min-height: 360px !important;
+                border-radius: 12px !important;
+                padding: 0 !important;
+                overflow: hidden;
+            }
+        }
+
     </style>
     <!-- ═══════════ HEADER TINH GỌN CHUẨN IOS ═══════════ -->
     <header class="app-header ios-header">
@@ -4443,6 +4462,7 @@
                 bkRender();
                 purgeOldTrash();
                 requestPersistentStorage();
+                if (typeof toggleMindmapView === 'function') toggleMindmapView(true);
                 console.log('✅ App khởi tạo thành công!');
             } catch (e) { console.error('Init error:', e);
                 alert('❌ Lỗi: ' + e.message); }
@@ -5046,6 +5066,10 @@
             await loadAllData();
             renderSidebar();
             renderCards();
+            const mmPanel = document.getElementById('mindmapPanel');
+            if (mmPanel && mmPanel.classList.contains('active')) {
+                toggleMindmapView(false);
+            }
             if (window.innerWidth <= 768 && window.innerHeight > 520) {
                 const sb = document.getElementById('folderSidebar');
                 if (sb && !sb.classList.contains('collapsed')) toggleSidebar();
@@ -5315,6 +5339,10 @@
         }
 
         function renderCards() {
+            const _mmP = document.getElementById('mindmapPanel');
+            if (_mmP && _mmP.classList.contains('active') && typeof renderMindmap === 'function') {
+                try { renderMindmap(); } catch (e) {}
+            }
             const filtered = getFiltered();
             const grid = document.getElementById('cardsGrid');
             const total = documents.length,
@@ -7413,6 +7441,8 @@
             if (!bar) return;
             const willOpen = !bar.classList.contains('open');
             if (willOpen) {
+                const mmPanel = document.getElementById('mindmapPanel');
+                if (mmPanel && mmPanel.classList.contains('active')) toggleMindmapView(false);
                 bar.classList.add('open');
                 if (btn) btn.classList.add('active');
                 if (input) setTimeout(() => input.focus(), 50);
@@ -7431,6 +7461,8 @@
             if (!grid) return;
             const willOpen = !grid.classList.contains('open');
             if (willOpen) {
+                const mmPanel = document.getElementById('mindmapPanel');
+                if (mmPanel && mmPanel.classList.contains('active')) toggleMindmapView(false);
                 grid.classList.add('open');
                 if (btn) btn.classList.add('active');
             } else {
